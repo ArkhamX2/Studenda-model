@@ -55,6 +55,8 @@ class Program
             context.Groups.Add(grp8);
             context.Groups.Add(grp9);
             context.SaveChanges();
+
+            // Email test.
         }
 
         Console.WriteLine("Completed!");
