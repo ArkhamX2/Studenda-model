@@ -74,4 +74,60 @@ public class ApplicationContext : DbContext
 
         base.OnModelCreating(modelBuilder);
     }
+
+    /// <summary>
+    /// Сохранить все изменения сессии в базу данных.
+    /// Используется для обновления метаданных модели.
+    /// </summary>
+    /// <returns>Количество затронутых записей.</returns>
+    public override int SaveChanges()
+    {
+        UpdateTrackedEntityMetadata();
+
+        return base.SaveChanges();
+    }
+
+    /// <summary>
+    /// Асинхронно сохранить все изменения сессии в базу данных.
+    /// Используется для обновления метаданных модели.
+    /// </summary>
+    /// <param name="acceptAllChangesOnSuccess">Флаг принятия всех изменений при успехе операции.</param>
+    /// <param name="cancellationToken">Токен отмены.</param>
+    /// <returns>Таск, представляющий операцию асинхронного сохранения с количеством затронутых записей.</returns>
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
+    {
+        UpdateTrackedEntityMetadata();
+
+        return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+    }
+
+    /// <summary>
+    /// Обновить метаданные всех добавленных
+    /// и модифицироанных моделей в кеше сессии.
+    /// </summary>
+    private void UpdateTrackedEntityMetadata()
+    {
+        var entities = ChangeTracker.Entries().Where(x => (x.Entity is Entity)
+            && (x.State == EntityState.Added || x.State == EntityState.Detached || x.State == EntityState.Modified));
+
+        foreach (var entity in entities)
+        {
+            if (!(entity.Entity is Entity))
+            {
+                continue;
+            }
+
+            // Добавлена новая модель.
+            if (entity.State == EntityState.Added)
+            {
+                ((Entity)entity.Entity).CreatedAt = DateTime.Now;
+            }
+
+            // Обновлена существующая модель.
+            if (entity.State == EntityState.Modified)
+            {
+                ((Entity)entity.Entity).UpdatedAt = DateTime.Now;
+            }
+        }
+    }
 }

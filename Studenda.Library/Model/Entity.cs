@@ -3,6 +3,7 @@
 /// <summary>
 /// Модель стандартного объекта с соответствующей
 /// таблицей в базе данных.
+/// Реализация Table Per Class подхода.
 /// </summary>
 public abstract class Entity
 {
