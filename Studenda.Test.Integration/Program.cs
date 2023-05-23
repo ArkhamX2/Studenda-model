@@ -32,31 +32,14 @@ class Program
             var grp8 = new Group { CourseId = 5, Name = "grp8" };
             var grp9 = new Group { CourseId = 6, Name = "grp9" };
 
-            context.Departments.Add(dept1);
-            context.Departments.Add(dept2);
-            context.Departments.Add(dept3);
+            context.Departments.AddRange(dept1, dept2, dept3);
             context.SaveChanges();
 
-            context.Courses.Add(crs1);
-            context.Courses.Add(crs2);
-            context.Courses.Add(crs3);
-            context.Courses.Add(crs4);
-            context.Courses.Add(crs5);
-            context.Courses.Add(crs6);
+            context.Courses.AddRange(crs1, crs2, crs3, crs4, crs5, crs6);
             context.SaveChanges();
 
-            context.Groups.Add(grp1);
-            context.Groups.Add(grp2);
-            context.Groups.Add(grp3);
-            context.Groups.Add(grp4);
-            context.Groups.Add(grp5);
-            context.Groups.Add(grp6);
-            context.Groups.Add(grp7);
-            context.Groups.Add(grp8);
-            context.Groups.Add(grp9);
+            context.Groups.AddRange(grp1, grp2, grp3, grp4, grp5, grp6, grp7, grp8, grp9);
             context.SaveChanges();
-
-            // Email test.
         }
 
         Console.WriteLine("Completed!");

@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Studenda.Library.Configuration;
 using Studenda.Library.Model;
 
@@ -42,6 +44,10 @@ public class ApplicationContext : DbContext
     {
         // TODO: Пока ограничимся только SQLite.
         optionsBuilder.UseSqlite("Data Source=storage.db");
+
+        #if DEBUG
+            optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
+        #endif
 
         base.OnConfiguring(optionsBuilder);
     }
