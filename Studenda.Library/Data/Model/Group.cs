@@ -1,4 +1,4 @@
-﻿namespace Studenda.Library.Model;
+﻿namespace Studenda.Library.Data.Model;
 
 /// <summary>
 /// Группа.

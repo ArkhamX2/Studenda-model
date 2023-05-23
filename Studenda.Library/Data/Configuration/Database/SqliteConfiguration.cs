@@ -1,6 +1,4 @@
-﻿using Studenda.Library;
-
-namespace Studenda.Library.Configuration.Database;
+﻿namespace Studenda.Library.Data.Configuration.Database;
 
 /// <summary>
 /// Конфигурация базы данных SQLite.

@@ -8,10 +8,11 @@ using Studenda.Library.Data.Model;
 namespace Studenda.Library.Data.Context;
 
 /// <summary>
-/// Сессия работы с внешней базой данных.
-/// Характеризуется большим временем доступа к данным.
+/// Сессия работы с внутренним хранилищем устройства.
+/// Используется для кеширования дольших объемов
+/// редко изменяющихся данных.
 /// </summary>
-public class ApplicationContext : DataContext
+public class CacheContext : DataContext
 {
     /// <summary>
     /// Обработать инициализацию сессии.
@@ -20,8 +21,7 @@ public class ApplicationContext : DataContext
     /// <param name="optionsBuilder">Набор интерфейсов настройки сессии.</param>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        // TODO: Пока Sqlite в качестве основного хранилища.
-        optionsBuilder.UseSqlite("Data Source=storage.db");
+        optionsBuilder.UseSqlite("Data Source=cache.db");
 
         #if DEBUG
             // TODO: Логи в файл или кастом логгер. Поддержка конфигураций.

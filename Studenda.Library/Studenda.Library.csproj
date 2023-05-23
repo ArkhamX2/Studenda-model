@@ -10,13 +10,17 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="7.0.5" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Model\" />
-    <None Remove="Configuration\" />
-    <None Remove="Configuration\Database\" />
+    <None Remove="Data\" />
+    <None Remove="Data\Model\" />
+    <None Remove="Data\Configuration\" />
+    <None Remove="Data\Context\" />
+    <None Remove="Data\Configuration\Model\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Model\" />
-    <Folder Include="Configuration\" />
-    <Folder Include="Configuration\Database\" />
+    <Folder Include="Data\" />
+    <Folder Include="Data\Model\" />
+    <Folder Include="Data\Configuration\" />
+    <Folder Include="Data\Context\" />
+    <Folder Include="Data\Configuration\Model\" />
   </ItemGroup>
 </Project>
