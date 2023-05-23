@@ -8,6 +8,9 @@ namespace Studenda.Library;
 
 /// <summary>
 /// Сессия работы с базой данных.
+/// 
+/// TODO: Использовать 2 контекста - для базы данных на сервере и для кеша на устройстве.
+/// TODO: Создать класс управления контекстами и их конфигурациями.
 /// </summary>
 public class ApplicationContext : DbContext
 {
@@ -33,11 +36,13 @@ public class ApplicationContext : DbContext
     {
         // Создаем базу данных при ее отсутствии.
         Database.EnsureCreated();
+
+        // TODO: Проверка подключения.
     }
 
     /// <summary>
     /// Обработать инициализацию сессии.
-    /// Используется для настройки подключения.
+    /// Используется для настройки сессии.
     /// </summary>
     /// <param name="optionsBuilder">Набор интерфейсов настройки сессии.</param>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -46,6 +51,7 @@ public class ApplicationContext : DbContext
         optionsBuilder.UseSqlite("Data Source=storage.db");
 
         #if DEBUG
+            // TODO: Логи в файл или кастом логгер. Поддержка конфигураций.
             optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
         #endif
 
@@ -54,13 +60,12 @@ public class ApplicationContext : DbContext
 
     /// <summary>
     /// Обработать инициализацию модели.
-    /// Используется для дополнительной настройки
-    /// модели, включая биндинг полей под данные,
-    /// создание зависимостей и маппинг в базе данных.
+    /// Используется для дополнительной настройки модели.
     /// </summary>
     /// <param name="modelBuilder">Набор интерфейсов настройки модели.</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // TODO: Использовать разные типы конфигураций модели в зависимости от используемого контекста.
         modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
         modelBuilder.ApplyConfiguration(new CourseConfiguration());
         modelBuilder.ApplyConfiguration(new GroupConfiguration());

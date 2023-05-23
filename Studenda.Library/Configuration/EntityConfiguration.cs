@@ -6,6 +6,9 @@ namespace Studenda.Library.Configuration;
 
 /// <summary>
 /// Конфигурация модели <see cref="Entity"/>.
+/// Используется для дополнительной настройки,
+/// включая биндинг полей под данные,
+/// создание зависимостей и маппинг в базе данных.
 /// </summary>
 /// <typeparam name="T">Модель стандартного объекта.</typeparam>
 public abstract class EntityConfiguration<T> : IEntityTypeConfiguration<T> where T : Entity
