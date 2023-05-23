@@ -35,6 +35,7 @@ public class ApplicationContext : DbContext
     public ApplicationContext() : base()
     {
         // Создаем базу данных при ее отсутствии.
+        // TODO: Вызовет ошибку при использовании миграций. Мы же будем использовать миграции?
         Database.EnsureCreated();
 
         // TODO: Проверка подключения.
@@ -65,6 +66,7 @@ public class ApplicationContext : DbContext
     /// <param name="modelBuilder">Набор интерфейсов настройки модели.</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        // Использование Fluent API.
         // TODO: Использовать разные типы конфигураций модели в зависимости от используемого контекста.
         modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
         modelBuilder.ApplyConfiguration(new CourseConfiguration());

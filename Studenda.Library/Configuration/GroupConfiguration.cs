@@ -15,11 +15,13 @@ public class GroupConfiguration : EntityConfiguration<Group>
     public override void Configure(EntityTypeBuilder<Group> builder)
     {
         builder.Property(group => group.Name)
-            .HasMaxLength(Group.NameLengthMax);
+            .HasMaxLength(Group.NameLengthMax)
+            .IsRequired();
 
         builder.HasOne(group => group.Course)
             .WithMany(course => course.Groups)
-            .HasForeignKey(group => group.CourseId);
+            .HasForeignKey(group => group.CourseId)
+            .IsRequired();
 
         base.Configure(builder);
     }

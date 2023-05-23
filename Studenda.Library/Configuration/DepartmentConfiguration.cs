@@ -15,7 +15,8 @@ public class DepartmentConfiguration : EntityConfiguration<Department>
     public override void Configure(EntityTypeBuilder<Department> builder)
     {
         builder.Property(department => department.Name)
-            .HasMaxLength(Department.NameLengthMax);
+            .HasMaxLength(Department.NameLengthMax)
+            .IsRequired();
 
         builder.HasMany(department => department.Courses)
             .WithOne(course => course.Department)

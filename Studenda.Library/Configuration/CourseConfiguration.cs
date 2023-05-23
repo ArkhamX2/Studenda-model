@@ -15,11 +15,13 @@ public class CourseConfiguration : EntityConfiguration<Course>
     public override void Configure(EntityTypeBuilder<Course> builder)
     {
         builder.Property(course => course.Name)
-            .HasMaxLength(Course.NameLengthMax);
+            .HasMaxLength(Course.NameLengthMax)
+            .IsRequired();
 
         builder.HasOne(course => course.Department)
             .WithMany(department => department.Courses)
-            .HasForeignKey(course => course.DepartmentId);
+            .HasForeignKey(course => course.DepartmentId)
+            .IsRequired();
 
         builder.HasMany(course => course.Groups)
             .WithOne(group => group.Course)
