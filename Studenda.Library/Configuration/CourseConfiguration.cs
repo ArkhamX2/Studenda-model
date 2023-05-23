@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Studenda.Library.Configuration.Database;
 using Studenda.Library.Model;
 
 namespace Studenda.Library.Configuration;
@@ -8,6 +9,12 @@ namespace Studenda.Library.Configuration;
 /// </summary>
 public class CourseConfiguration : EntityConfiguration<Course>
 {
+    /// <summary>
+    /// Конструктор.
+    /// </summary>
+    /// <param name="configuration">Конфигурация базы данных.</param>
+    public CourseConfiguration(DatabaseConfiguration configuration) : base(configuration) { }
+
     /// <summary>
     /// Задать конфигурацию для модели.
     /// </summary>

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Studenda.Library.Configuration.Database;
 using Studenda.Library.Model;
 
 namespace Studenda.Library.Configuration;
@@ -14,16 +15,30 @@ namespace Studenda.Library.Configuration;
 public abstract class EntityConfiguration<T> : IEntityTypeConfiguration<T> where T : Entity
 {
     /// <summary>
+    /// Конструктор.
+    /// </summary>
+    /// <param name="configuration">Конфигурация базы данных.</param>
+    public EntityConfiguration(DatabaseConfiguration configuration)
+    {
+        DatabaseConfiguration = configuration;
+    }
+
+    /// <summary>
+    /// Конфигурация базы данных.
+    /// </summary>
+    protected DatabaseConfiguration DatabaseConfiguration { get; private set; }
+
+    /// <summary>
     /// Задать конфигурацию для модели.
     /// </summary>
     /// <param name="builder">Набор интерфейсов настройки модели.</param>
     public virtual void Configure(EntityTypeBuilder<T> builder)
     {
         builder.Property(entity => entity.CreatedAt)
-            .HasColumnType(DataConstant.SQLite.DateTimeType)
-            .HasDefaultValueSql(DataConstant.SQLite.DateTimeCurrent);
+            .HasColumnType(DatabaseConfiguration.DateTimeType)
+            .HasDefaultValueSql(DatabaseConfiguration.DateTimeValueCurrent);
 
         builder.Property(entity => entity.UpdatedAt)
-            .HasColumnType(DataConstant.SQLite.DateTimeType);
+            .HasColumnType(DatabaseConfiguration.DateTimeType);
     }
 }

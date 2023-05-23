@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Studenda.Library.Configuration;
+using Studenda.Library.Configuration.Database;
 using Studenda.Library.Model;
 
 namespace Studenda.Library;
@@ -14,6 +15,18 @@ namespace Studenda.Library;
 /// </summary>
 public class ApplicationContext : DbContext
 {
+    /// <summary>
+    /// Конструктор.
+    /// </summary>
+    public ApplicationContext() : base()
+    {
+        // Создаем базу данных при ее отсутствии.
+        // TODO: Вызовет ошибку при использовании миграций. Мы же будем использовать миграции?
+        Database.EnsureCreated();
+
+        // TODO: Проверка подключения.
+    }
+
     /// <summary>
     /// Набор объектов <see cref="Department"/> в базе данных.
     /// </summary>
@@ -30,25 +43,13 @@ public class ApplicationContext : DbContext
     public DbSet<Group> Groups => Set<Group>();
 
     /// <summary>
-    /// Конструктор.
-    /// </summary>
-    public ApplicationContext() : base()
-    {
-        // Создаем базу данных при ее отсутствии.
-        // TODO: Вызовет ошибку при использовании миграций. Мы же будем использовать миграции?
-        Database.EnsureCreated();
-
-        // TODO: Проверка подключения.
-    }
-
-    /// <summary>
     /// Обработать инициализацию сессии.
     /// Используется для настройки сессии.
     /// </summary>
     /// <param name="optionsBuilder">Набор интерфейсов настройки сессии.</param>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        // TODO: Пока ограничимся только SQLite.
+        // TODO: Реализовать выбор в зависимости от типа базы данных.
         optionsBuilder.UseSqlite("Data Source=storage.db");
 
         #if DEBUG
@@ -66,11 +67,12 @@ public class ApplicationContext : DbContext
     /// <param name="modelBuilder">Набор интерфейсов настройки модели.</param>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        var configuration = new SqliteConfiguration();
+
         // Использование Fluent API.
-        // TODO: Использовать разные типы конфигураций модели в зависимости от используемого контекста.
-        modelBuilder.ApplyConfiguration(new DepartmentConfiguration());
-        modelBuilder.ApplyConfiguration(new CourseConfiguration());
-        modelBuilder.ApplyConfiguration(new GroupConfiguration());
+        modelBuilder.ApplyConfiguration(new DepartmentConfiguration(configuration));
+        modelBuilder.ApplyConfiguration(new CourseConfiguration(configuration));
+        modelBuilder.ApplyConfiguration(new GroupConfiguration(configuration));
 
         base.OnModelCreating(modelBuilder);
     }
@@ -104,6 +106,12 @@ public class ApplicationContext : DbContext
     /// <summary>
     /// Обновить метаданные всех добавленных
     /// и модифицироанных моделей в кеше сессии.
+    /// Такой подход накладывает дополнительные ограничения
+    /// при работе с сессиями. Необходимо учитывать, что
+    /// для обновления записей нужно сперва загрузить эти
+    /// записи в кеш сессии, чтобы трекер корректно
+    /// зафиксировал изменения.
+    /// TODO: Возможно, это не лучшее решение. Необходимы тесты.
     /// </summary>
     private void UpdateTrackedEntityMetadata()
     {

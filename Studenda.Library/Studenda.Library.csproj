@@ -12,9 +12,11 @@
   <ItemGroup>
     <None Remove="Model\" />
     <None Remove="Configuration\" />
+    <None Remove="Configuration\Database\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Model\" />
     <Folder Include="Configuration\" />
+    <Folder Include="Configuration\Database\" />
   </ItemGroup>
 </Project>
