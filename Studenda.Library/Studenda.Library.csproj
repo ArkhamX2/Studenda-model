@@ -11,16 +11,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Data\" />
-    <None Remove="Data\Model\" />
     <None Remove="Data\Configuration\" />
-    <None Remove="Data\Context\" />
     <None Remove="Data\Configuration\Model\" />
+    <None Remove="Model\" />
+    <None Remove="Model\Base\" />
+    <None Remove="Data\Configuration\Model\Base\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
-    <Folder Include="Data\Model\" />
     <Folder Include="Data\Configuration\" />
-    <Folder Include="Data\Context\" />
     <Folder Include="Data\Configuration\Model\" />
+    <Folder Include="Model\" />
+    <Folder Include="Model\Base\" />
+    <Folder Include="Data\Configuration\Model\Base\" />
   </ItemGroup>
 </Project>

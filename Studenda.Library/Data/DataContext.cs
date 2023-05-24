@@ -3,14 +3,26 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Studenda.Library.Data.Configuration;
 using Studenda.Library.Data.Configuration.Database;
-using Studenda.Library.Data.Model;
+using Studenda.Library.Model;
+using Studenda.Library.Model.Base;
 
-namespace Studenda.Library.Data.Context;
+namespace Studenda.Library.Data;
 
 /// <summary>
 /// Сессия работы с базой данных.
 /// 
 /// TODO: Создать класс управления контекстами и их конфигурациями.
+///
+/// Памятка для работы с кешем:
+/// - context.Add() для запроса INSERT.
+///   Объекты вставляются со статусом Added.
+///   При коммите изменений произойдет попытка вставки.
+/// - context.Attach() для вставки в кеш.
+///   Объекты вставляются со статусом Untracked.
+///   При коммите изменений ничего не произойдет.
+/// - context.Update() для UPDATE.
+///   Объекты вставляются со статусом Modified.
+///   При коммите изменений произойдет попытка обновления.
 /// </summary>
 public abstract class DataContext : DbContext
 {
@@ -24,6 +36,15 @@ public abstract class DataContext : DbContext
         Database.EnsureCreated();
 
         // TODO: Проверка подключения.
+    }
+
+    /// <summary>
+    /// Конструктор.
+    /// </summary>
+    /// <param name="options">Конфигурация сессии.</param>
+    public DataContext(DbContextOptions<DataContext> options) : base(options)
+    {
+        Database.EnsureCreated();
     }
 
     /// <summary>

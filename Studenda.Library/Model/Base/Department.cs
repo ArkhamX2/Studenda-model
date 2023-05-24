@@ -1,9 +1,9 @@
-﻿namespace Studenda.Library.Data.Model;
+﻿namespace Studenda.Library.Model.Base;
 
 /// <summary>
-/// Группа.
+/// Факультет.
 /// </summary>
-public class Group : Entity
+public class Department : Entity
 {
     /// <summary>
     /// Минимальная длина названия.
@@ -16,17 +16,12 @@ public class Group : Entity
     public const int NameLengthMax = 128;
 
     /// <summary>
-    /// Идентификатор связанного курса.
-    /// </summary>
-    public int CourseId { get; set; }
-
-    /// <summary>
     /// Название.
     /// </summary>
-    public string Name { get; set; } = string.Empty;
+    public string Name { get; set; } = null!;
 
     /// <summary>
-    /// Связанный курс.
+    /// Связанные курсы.
     /// </summary>
-    public Course Course { get; set; } = null!;
+    public List<Course> Courses { get; set; } = null!;
 }

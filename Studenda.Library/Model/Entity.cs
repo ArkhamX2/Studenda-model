@@ -1,4 +1,4 @@
-﻿namespace Studenda.Library.Data.Model;
+﻿namespace Studenda.Library.Model;
 
 /// <summary>
 /// Модель стандартного объекта с соответствующей

@@ -1,4 +1,4 @@
-﻿namespace Studenda.Library.Data.Model;
+﻿namespace Studenda.Library.Model.Base;
 
 /// <summary>
 /// Курс.
@@ -33,5 +33,5 @@ public class Course : Entity
     /// <summary>
     /// Связанные группы.
     /// </summary>
-    public ICollection<Group> Groups { get; set; } = null!;
+    public List<Group> Groups { get; set; } = null!;
 }

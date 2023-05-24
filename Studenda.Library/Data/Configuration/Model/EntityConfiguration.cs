@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Studenda.Library.Data.Configuration.Database;
-using Studenda.Library.Data.Model;
+using Studenda.Library.Model;
 
-namespace Studenda.Library.Data.Configuration;
+namespace Studenda.Library.Data.Configuration.Model;
 
 /// <summary>
 /// Конфигурация модели <see cref="Entity"/>.

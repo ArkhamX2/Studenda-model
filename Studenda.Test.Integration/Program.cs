@@ -1,5 +1,5 @@
-﻿using Studenda.Library.Data.Context;
-using Studenda.Library.Data.Model;
+﻿using Studenda.Library.Data;
+using Studenda.Library.Model.Base;
 
 namespace Studenda.Test.Integration;
 

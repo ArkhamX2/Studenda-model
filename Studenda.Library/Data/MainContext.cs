@@ -1,18 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Studenda.Library.Data.Configuration;
+using Studenda.Library.Data.Configuration.Model.Base;
 using Studenda.Library.Data.Configuration.Database;
-using Studenda.Library.Data.Model;
 
-namespace Studenda.Library.Data.Context;
+namespace Studenda.Library.Data;
 
 /// <summary>
-/// Сессия работы с внутренним хранилищем устройства.
-/// Используется для кеширования дольших объемов
-/// редко изменяющихся данных.
+/// Сессия работы с внешней базой данных.
+/// Характеризуется большим временем доступа к данным.
 /// </summary>
-public class CacheContext : DataContext
+public class ApplicationContext : DataContext
 {
     /// <summary>
     /// Обработать инициализацию сессии.
@@ -21,7 +18,8 @@ public class CacheContext : DataContext
     /// <param name="optionsBuilder">Набор интерфейсов настройки сессии.</param>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlite("Data Source=cache.db");
+        // TODO: Пока Sqlite в качестве основного хранилища.
+        optionsBuilder.UseSqlite("Data Source=storage.db");
 
         #if DEBUG
             // TODO: Логи в файл или кастом логгер. Поддержка конфигураций.
