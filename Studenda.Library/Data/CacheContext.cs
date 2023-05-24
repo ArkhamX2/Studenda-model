@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Studenda.Library.Data.Configuration.Model.Base;
+using Studenda.Library.Data.Configuration.Model.Common;
 using Studenda.Library.Data.Configuration.Database;
+using Studenda.Library.Data.Configuration.Model.Link;
+using Studenda.Library.Data.Configuration.Model.Account;
 
 namespace Studenda.Library.Data;
 
@@ -39,9 +41,12 @@ public class CacheContext : DataContext
         var configuration = new SqliteConfiguration();
 
         // Использование Fluent API.
+        modelBuilder.ApplyConfiguration(new UserConfiguration(configuration));
+        modelBuilder.ApplyConfiguration(new UserRoleConfiguration(configuration));
         modelBuilder.ApplyConfiguration(new DepartmentConfiguration(configuration));
         modelBuilder.ApplyConfiguration(new CourseConfiguration(configuration));
         modelBuilder.ApplyConfiguration(new GroupConfiguration(configuration));
+        modelBuilder.ApplyConfiguration(new UserGroupLinkConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }

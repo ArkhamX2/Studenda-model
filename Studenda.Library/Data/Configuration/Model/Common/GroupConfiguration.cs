@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Studenda.Library.Data.Configuration.Database;
-using Studenda.Library.Model.Base;
+using Studenda.Library.Model.Common;
 
-namespace Studenda.Library.Data.Configuration.Model.Base;
+namespace Studenda.Library.Data.Configuration.Model.Common;
 
 /// <summary>
 /// Конфигурация модели <see cref="Group"/>.
@@ -29,6 +29,10 @@ public class GroupConfiguration : EntityConfiguration<Group>
             .WithMany(course => course.Groups)
             .HasForeignKey(group => group.CourseId)
             .IsRequired();
+
+        builder.HasMany(group => group.UserGroupLinks)
+            .WithOne(link => link.Group)
+            .HasForeignKey(link => link.GroupId);
 
         base.Configure(builder);
     }

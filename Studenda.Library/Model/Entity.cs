@@ -7,10 +7,22 @@
 /// </summary>
 public abstract class Entity
 {
-	/// <summary>
-	/// Идентификатор.
-	/// </summary>
-	public int Id { get; set; }
+    /*             _   _ _
+     *   ___ _ __ | |_(_) |_ _   _
+     *  / _ \ '_ \| __| | __| | | |
+     * |  __/ | | | |_| | |_| |_| |
+     *  \___|_| |_|\__|_|\__|\__, |
+     *                       |___/
+     *
+     * Поля данных, соответствующие таковым в таблице
+     * модели в базе данных.
+     */
+    #region Entity
+
+    /// <summary>
+    /// Идентификатор.
+    /// </summary>
+    public int Id { get; set; }
 
 	/// <summary>
 	/// Дата создания.
@@ -21,4 +33,6 @@ public abstract class Entity
 	/// Дата обновления.
 	/// </summary>
 	public DateTime? UpdatedAt { get; set; }
+
+    #endregion
 }

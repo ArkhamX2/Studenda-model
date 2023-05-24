@@ -4,7 +4,9 @@ using Microsoft.Extensions.Options;
 using Studenda.Library.Data.Configuration;
 using Studenda.Library.Data.Configuration.Database;
 using Studenda.Library.Model;
-using Studenda.Library.Model.Base;
+using Studenda.Library.Model.Account;
+using Studenda.Library.Model.Common;
+using Studenda.Library.Model.Link;
 
 namespace Studenda.Library.Data;
 
@@ -17,12 +19,12 @@ namespace Studenda.Library.Data;
 /// - context.Add() для запроса INSERT.
 ///   Объекты вставляются со статусом Added.
 ///   При коммите изменений произойдет попытка вставки.
-/// - context.Attach() для вставки в кеш.
-///   Объекты вставляются со статусом Untracked.
-///   При коммите изменений ничего не произойдет.
 /// - context.Update() для UPDATE.
 ///   Объекты вставляются со статусом Modified.
 ///   При коммите изменений произойдет попытка обновления.
+/// - context.Attach() для вставки в кеш.
+///   Объекты вставляются со статусом Unchanged.
+///   При коммите изменений ничего не произойдет.
 /// </summary>
 public abstract class DataContext : DbContext
 {
@@ -48,6 +50,16 @@ public abstract class DataContext : DbContext
     }
 
     /// <summary>
+    /// Набор объектов <see cref="User"/> в базе данных.
+    /// </summary>
+    public DbSet<User> Users => Set<User>();
+
+    /// <summary>
+    /// Набор объектов <see cref="UserRole"/> в базе данных.
+    /// </summary>
+    public DbSet<UserRole> UserRoles => Set<UserRole>();
+
+    /// <summary>
     /// Набор объектов <see cref="Department"/> в базе данных.
     /// </summary>
     public DbSet<Department> Departments => Set<Department>();
@@ -61,6 +73,11 @@ public abstract class DataContext : DbContext
     /// Набор объектов <see cref="Group"/> в базе данных.
     /// </summary>
     public DbSet<Group> Groups => Set<Group>();
+
+    /// <summary>
+    /// Набор объектов <see cref="UserGroupLink"/> в базе данных.
+    /// </summary>
+    public DbSet<UserGroupLink> UserGroupLinks => Set<UserGroupLink>();
 
     /// <summary>
     /// Сохранить все изменения сессии в базу данных.

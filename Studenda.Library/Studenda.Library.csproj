@@ -15,14 +15,20 @@
     <None Remove="Data\Configuration\Model\" />
     <None Remove="Model\" />
     <None Remove="Model\Base\" />
-    <None Remove="Data\Configuration\Model\Base\" />
+    <None Remove="Model\Account\" />
+    <None Remove="Data\Configuration\Model\Account\" />
+    <None Remove="Model\Link\" />
+    <None Remove="Data\Configuration\Model\Link\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
     <Folder Include="Data\Configuration\" />
     <Folder Include="Data\Configuration\Model\" />
     <Folder Include="Model\" />
-    <Folder Include="Model\Base\" />
-    <Folder Include="Data\Configuration\Model\Base\" />
+    <Folder Include="Model\Common\" />
+    <Folder Include="Model\Account\" />
+    <Folder Include="Data\Configuration\Model\Account\" />
+    <Folder Include="Model\Link\" />
+    <Folder Include="Data\Configuration\Model\Link\" />
   </ItemGroup>
 </Project>
