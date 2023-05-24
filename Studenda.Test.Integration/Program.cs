@@ -1,4 +1,6 @@
-﻿using Studenda.Library.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Studenda.Library.Data;
+using Studenda.Library.Data.Configuration.Database;
 using Studenda.Library.Model.Common;
 
 namespace Studenda.Test.Integration;
@@ -7,9 +9,9 @@ class Program
 {
     static void Main(string[] args)
     {
-        Console.WriteLine("Starting...");
+        Console.WriteLine("Starting INSERT test...");
 
-        using (ApplicationContext context = new ApplicationContext())
+        using (ApplicationContext context = new ApplicationContext(new SqliteConfiguration()))
         {
             var dept1 = new Department { Name = "dept1" };
             var dept2 = new Department { Name = "dept2" };
@@ -38,6 +40,21 @@ class Program
 
             context.Groups.AddRange(grp1, grp2, grp3, grp4, grp5, grp6, grp7, grp8, grp9);
             context.SaveChanges();
+        }
+
+        Console.WriteLine("Starting SELECT test...");
+
+        using (ApplicationContext context = new ApplicationContext(new SqliteConfiguration()))
+        {
+            var groups = context.Groups
+                .Include(group => group.Course)
+                    .ThenInclude(course => course.Department)
+                .Include(group => group.UserGroupLinks)
+                    .ThenInclude(link => link.User)
+                        .ThenInclude(user => user.UserRole)
+                .ToList();
+
+            Console.WriteLine(groups.Count);
         }
 
         Console.WriteLine("Completed!");

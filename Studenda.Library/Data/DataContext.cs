@@ -3,6 +3,9 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Studenda.Library.Data.Configuration;
 using Studenda.Library.Data.Configuration.Database;
+using Studenda.Library.Data.Configuration.Model.Account;
+using Studenda.Library.Data.Configuration.Model.Common;
+using Studenda.Library.Data.Configuration.Model.Link;
 using Studenda.Library.Model;
 using Studenda.Library.Model.Account;
 using Studenda.Library.Model.Common;
@@ -31,53 +34,64 @@ public abstract class DataContext : DbContext
     /// <summary>
     /// Конструктор.
     /// </summary>
-    public DataContext() : base()
+    /// <param name="configuration">Конфигурация базы данных.</param>
+    public DataContext(DatabaseConfiguration configuration) : base()
     {
-        // Создаем базу данных при ее отсутствии.
-        // TODO: Вызовет ошибку при использовании миграций. Мы же будем использовать миграции?
-        Database.EnsureCreated();
-
-        // TODO: Проверка подключения.
+        Configuration = configuration;
     }
 
     /// <summary>
-    /// Конструктор.
+    /// Конфигурация базы данных.
     /// </summary>
-    /// <param name="options">Конфигурация сессии.</param>
-    public DataContext(DbContextOptions<DataContext> options) : base(options)
-    {
-        Database.EnsureCreated();
-    }
+    protected DatabaseConfiguration Configuration { get; private set; }
 
     /// <summary>
-    /// Набор объектов <see cref="User"/> в базе данных.
+    /// Набор объектов <see cref="User"/>.
     /// </summary>
     public DbSet<User> Users => Set<User>();
 
     /// <summary>
-    /// Набор объектов <see cref="UserRole"/> в базе данных.
+    /// Набор объектов <see cref="UserRole"/>.
     /// </summary>
     public DbSet<UserRole> UserRoles => Set<UserRole>();
 
     /// <summary>
-    /// Набор объектов <see cref="Department"/> в базе данных.
+    /// Набор объектов <see cref="Department"/>.
     /// </summary>
     public DbSet<Department> Departments => Set<Department>();
 
     /// <summary>
-    /// Набор объектов <see cref="Course"/> в базе данных.
+    /// Набор объектов <see cref="Course"/>.
     /// </summary>
     public DbSet<Course> Courses => Set<Course>();
 
     /// <summary>
-    /// Набор объектов <see cref="Group"/> в базе данных.
+    /// Набор объектов <see cref="Group"/>.
     /// </summary>
     public DbSet<Group> Groups => Set<Group>();
 
     /// <summary>
-    /// Набор объектов <see cref="UserGroupLink"/> в базе данных.
+    /// Набор объектов <see cref="UserGroupLink"/>.
     /// </summary>
     public DbSet<UserGroupLink> UserGroupLinks => Set<UserGroupLink>();
+
+    /// <summary>
+    /// Обработать инициализацию модели.
+    /// Используется для дополнительной настройки модели.
+    /// </summary>
+    /// <param name="modelBuilder">Набор интерфейсов настройки модели.</param>
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // Использование Fluent API.
+        modelBuilder.ApplyConfiguration(new UserConfiguration(Configuration));
+        modelBuilder.ApplyConfiguration(new UserRoleConfiguration(Configuration));
+        modelBuilder.ApplyConfiguration(new DepartmentConfiguration(Configuration));
+        modelBuilder.ApplyConfiguration(new CourseConfiguration(Configuration));
+        modelBuilder.ApplyConfiguration(new GroupConfiguration(Configuration));
+        modelBuilder.ApplyConfiguration(new UserGroupLinkConfiguration());
+
+        base.OnModelCreating(modelBuilder);
+    }
 
     /// <summary>
     /// Сохранить все изменения сессии в базу данных.
@@ -117,26 +131,26 @@ public abstract class DataContext : DbContext
     /// </summary>
     private void UpdateTrackedEntityMetadata()
     {
-        var entities = ChangeTracker.Entries().Where(x => (x.Entity is Entity)
-            && (x.State == EntityState.Added || x.State == EntityState.Detached || x.State == EntityState.Modified));
+        var entries = ChangeTracker.Entries().Where(entry => (entry.Entity is Entity)
+            && (entry.State == EntityState.Added || entry.State == EntityState.Modified));
 
-        foreach (var entity in entities)
+        foreach (var entry in entries)
         {
-            if (!(entity.Entity is Entity))
+            if (!(entry.Entity is Entity entity))
             {
                 continue;
             }
 
-            // Добавлена новая модель.
-            if (entity.State == EntityState.Added)
+            // Добавлен новый объект.
+            if (entry.State == EntityState.Added)
             {
-                ((Entity)entity.Entity).CreatedAt = DateTime.Now;
+                entity.CreatedAt = DateTime.Now;
             }
 
-            // Обновлена существующая модель.
-            if (entity.State == EntityState.Modified)
+            // Обновлен существующий объект.
+            if (entry.State == EntityState.Modified)
             {
-                ((Entity)entity.Entity).UpdatedAt = DateTime.Now;
+                entity.UpdatedAt = DateTime.Now;
             }
         }
     }
