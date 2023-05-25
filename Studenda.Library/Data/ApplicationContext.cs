@@ -7,6 +7,8 @@ namespace Studenda.Library.Data;
 /// <summary>
 /// Сессия работы с внешней базой данных.
 /// Характеризуется большим временем доступа к данным.
+///
+/// TODO: Добавить поддержку внешней базы данных.
 /// </summary>
 public class ApplicationContext : DataContext
 {
@@ -17,10 +19,12 @@ public class ApplicationContext : DataContext
     /// <exception cref="Exception"></exception>
     public ApplicationContext(DatabaseConfiguration configuration) : base(configuration)
     {
+#if !DEBUG
         if (!Database.CanConnect())
         {
-            throw new Exception("Connection error.");
+            throw new Exception("Connection error!");
         }
+#endif
 
         Database.EnsureCreated();
     }
@@ -32,12 +36,13 @@ public class ApplicationContext : DataContext
     /// <param name="optionsBuilder">Набор интерфейсов настройки сессии.</param>
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        // TODO: Пока Sqlite в качестве основного хранилища.
+#if DEBUG
         optionsBuilder.UseSqlite("Data Source=storage.db");
 
-#if DEBUG
         optionsBuilder.EnableSensitiveDataLogging();
         optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
+#else
+        throw new NotImplementedException("RELEASE data source is not implemented yet!");
 #endif
 
         base.OnConfiguring(optionsBuilder);

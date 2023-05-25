@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Studenda.Library.Data.Configuration;
 using Studenda.Library.Data.Configuration.Database;
 using Studenda.Library.Data.Configuration.Model.Account;
 using Studenda.Library.Data.Configuration.Model.Common;
@@ -71,6 +69,11 @@ public abstract class DataContext : DbContext
     public DbSet<Group> Groups => Set<Group>();
 
     /// <summary>
+    /// Набор объектов <see cref="WeekType"/>.
+    /// </summary>
+    public DbSet<WeekType> WeekTypes => Set<WeekType>();
+
+    /// <summary>
     /// Набор объектов <see cref="UserGroupLink"/>.
     /// </summary>
     public DbSet<UserGroupLink> UserGroupLinks => Set<UserGroupLink>();
@@ -88,6 +91,7 @@ public abstract class DataContext : DbContext
         modelBuilder.ApplyConfiguration(new DepartmentConfiguration(Configuration));
         modelBuilder.ApplyConfiguration(new CourseConfiguration(Configuration));
         modelBuilder.ApplyConfiguration(new GroupConfiguration(Configuration));
+        modelBuilder.ApplyConfiguration(new WeekTypeConfiguration(Configuration));
         modelBuilder.ApplyConfiguration(new UserGroupLinkConfiguration());
 
         base.OnModelCreating(modelBuilder);
