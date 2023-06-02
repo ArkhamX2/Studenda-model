@@ -1,17 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Studenda.Library.Data;
-using Studenda.Library.Data.Configuration.Database;
+using Studenda.Library.Data.Configuration;
 using Studenda.Library.Model.Common;
 
 namespace Studenda.Test.Integration;
 
-class Program
+internal static class Program
 {
-    static void Main(string[] args)
+    private static void Main()
     {
         Console.WriteLine("Starting INSERT test...");
 
-        using (ApplicationContext context = new ApplicationContext(new SqliteConfiguration()))
+        using (var context = new ApplicationContext(new SqliteConfiguration()))
         {
             var dept1 = new Department { Name = "dept1" };
             var dept2 = new Department { Name = "dept2" };
@@ -44,7 +44,7 @@ class Program
 
         Console.WriteLine("Starting SELECT test...");
 
-        using (ApplicationContext context = new ApplicationContext(new SqliteConfiguration()))
+        using (var context = new ApplicationContext(new SqliteConfiguration()))
         {
             var groups = context.Groups
                 .Include(group => group.Course)

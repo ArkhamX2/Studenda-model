@@ -1,4 +1,7 @@
-﻿namespace Studenda.Library.Model.Account;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Studenda.Library.Data.Configuration;
+
+namespace Studenda.Library.Model.Account;
 
 /// <summary>
 /// Роль пользователя.
@@ -6,6 +9,35 @@
 /// </summary>
 public class UserRole : Entity
 {
+    /// <summary>
+    /// Конфигурация модели <see cref="User"/>.
+    /// </summary>
+    internal class Configuration : Configuration<UserRole>
+    {
+        /// <summary>
+        /// Конструктор.
+        /// </summary>
+        /// <param name="configuration">Конфигурация базы данных.</param>
+        public Configuration(DatabaseConfiguration configuration) : base(configuration) { }
+
+        /// <summary>
+        /// Задать конфигурацию для модели.
+        /// </summary>
+        /// <param name="builder">Набор интерфейсов настройки модели.</param>
+        public override void Configure(EntityTypeBuilder<UserRole> builder)
+        {
+            builder.Property(role => role.Name)
+                .HasMaxLength(User.NameLengthMax)
+                .IsRequired();
+
+            builder.HasMany(role => role.Users)
+                .WithOne(user => user.UserRole)
+                .HasForeignKey(user => user.UserRoleId);
+
+            base.Configure(builder);
+        }
+    }
+    
     /*                   __ _                       _   _
      *   ___ ___  _ __  / _(_) __ _ _   _ _ __ __ _| |_(_) ___  _ __
      *  / __/ _ \| '_ \| |_| |/ _` | | | | '__/ _` | __| |/ _ \| '_ \

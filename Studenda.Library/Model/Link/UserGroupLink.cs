@@ -1,4 +1,6 @@
-﻿using Studenda.Library.Model.Account;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Studenda.Library.Model.Account;
 using Studenda.Library.Model.Common;
 
 namespace Studenda.Library.Model.Link;
@@ -8,6 +10,33 @@ namespace Studenda.Library.Model.Link;
 /// </summary>
 public class UserGroupLink
 {
+    /// <summary>
+    /// Конфигурация модели <see cref="UserGroupLink"/>.
+    /// </summary>
+    internal class Configuration : IEntityTypeConfiguration<UserGroupLink>
+    {
+        /// <summary>
+        /// Задать конфигурацию для модели.
+        /// </summary>
+        /// <param name="builder">Набор интерфейсов настройки модели.</param>
+        public void Configure(EntityTypeBuilder<UserGroupLink> builder)
+        {
+            builder.HasKey(link => new
+            {
+                link.UserId,
+                link.GroupId
+            });
+
+            builder.HasOne(link => link.User)
+                .WithMany(user => user.UserGroupLinks)
+                .HasForeignKey(link => link.UserId);
+
+            builder.HasOne(link => link.Group)
+                .WithMany(group => group.UserGroupLinks)
+                .HasForeignKey(link => link.GroupId);
+        }
+    }
+    
     /*             _   _ _
      *   ___ _ __ | |_(_) |_ _   _
      *  / _ \ '_ \| __| | __| | | |

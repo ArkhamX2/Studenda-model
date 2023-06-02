@@ -22,13 +22,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
-    <Folder Include="Data\Configuration\" />
-    <Folder Include="Data\Configuration\Model\" />
     <Folder Include="Model\" />
     <Folder Include="Model\Common\" />
     <Folder Include="Model\Account\" />
-    <Folder Include="Data\Configuration\Model\Account\" />
     <Folder Include="Model\Link\" />
-    <Folder Include="Data\Configuration\Model\Link\" />
   </ItemGroup>
 </Project>

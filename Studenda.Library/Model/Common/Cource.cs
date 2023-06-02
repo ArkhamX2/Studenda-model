@@ -1,10 +1,47 @@
-﻿namespace Studenda.Library.Model.Common;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Studenda.Library.Data.Configuration;
+
+namespace Studenda.Library.Model.Common;
 
 /// <summary>
 /// Курс.
 /// </summary>
 public class Course : Entity
 {
+    /// <summary>
+    /// Конфигурация модели <see cref="Course"/>.
+    /// </summary>
+    internal class Configuration : Configuration<Course>
+    {
+        /// <summary>
+        /// Конструктор.
+        /// </summary>
+        /// <param name="configuration">Конфигурация базы данных.</param>
+        public Configuration(DatabaseConfiguration configuration) : base(configuration) { }
+
+        /// <summary>
+        /// Задать конфигурацию для модели.
+        /// </summary>
+        /// <param name="builder">Набор интерфейсов настройки модели.</param>
+        public override void Configure(EntityTypeBuilder<Course> builder)
+        {
+            builder.Property(course => course.Name)
+                .HasMaxLength(NameLengthMax)
+                .IsRequired();
+
+            builder.HasOne(course => course.Department)
+                .WithMany(department => department.Courses)
+                .HasForeignKey(course => course.DepartmentId)
+                .IsRequired();
+
+            builder.HasMany(course => course.Groups)
+                .WithOne(group => group.Course)
+                .HasForeignKey(group => group.CourseId);
+
+            base.Configure(builder);
+        }
+    }
+    
     /*                   __ _                       _   _
      *   ___ ___  _ __  / _(_) __ _ _   _ _ __ __ _| |_(_) ___  _ __
      *  / __/ _ \| '_ \| |_| |/ _` | | | | '__/ _` | __| |/ _ \| '_ \

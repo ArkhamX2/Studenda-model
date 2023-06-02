@@ -1,4 +1,6 @@
-﻿using Studenda.Library.Model.Link;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Studenda.Library.Data.Configuration;
+using Studenda.Library.Model.Link;
 
 namespace Studenda.Library.Model.Account;
 
@@ -7,6 +9,54 @@ namespace Studenda.Library.Model.Account;
 /// </summary>
 public class User : Entity
 {
+    /// <summary>
+    /// Конфигурация модели <see cref="User"/>.
+    /// </summary>
+    internal class Configuration : Configuration<User>
+    {
+        /// <summary>
+        /// Конструктор.
+        /// </summary>
+        /// <param name="configuration">Конфигурация базы данных.</param>
+        public Configuration(DatabaseConfiguration configuration) : base(configuration) { }
+
+        /// <summary>
+        /// Задать конфигурацию для модели.
+        /// </summary>
+        /// <param name="builder">Набор интерфейсов настройки модели.</param>
+        public override void Configure(EntityTypeBuilder<User> builder)
+        {
+            builder.Property(user => user.Name)
+                .HasMaxLength(NameLengthMax)
+                .IsRequired();
+
+            builder.Property(user => user.Surname)
+                .HasMaxLength(SurnameLengthMax);
+
+            builder.Property(user => user.Patronymic)
+                .HasMaxLength(PatronymicLengthMax);
+
+            builder.Property(user => user.Email)
+                .HasMaxLength(EmailLengthMax)
+                .IsRequired();
+
+            builder.Property(user => user.PasswordHash)
+                .HasMaxLength(PasswordHashLengthMax)
+                .IsRequired();
+
+            builder.HasOne(user => user.UserRole)
+                .WithMany(role => role.Users)
+                .HasForeignKey(user => user.UserRoleId)
+                .IsRequired();
+
+            builder.HasMany(user => user.UserGroupLinks)
+                .WithOne(link => link.User)
+                .HasForeignKey(link => link.UserId);
+
+            base.Configure(builder);
+        }
+    }
+    
     /*                   __ _                       _   _
      *   ___ ___  _ __  / _(_) __ _ _   _ _ __ __ _| |_(_) ___  _ __
      *  / __/ _ \| '_ \| |_| |/ _` | | | | '__/ _` | __| |/ _ \| '_ \

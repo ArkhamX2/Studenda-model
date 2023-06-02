@@ -1,10 +1,38 @@
-﻿namespace Studenda.Library.Model.Common;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Studenda.Library.Data.Configuration;
+
+namespace Studenda.Library.Model.Common;
 
 /// <summary>
 /// Тип учебной недели.
 /// </summary>
 public class WeekType : Entity
 {
+    /// <summary>
+    /// Конфигурация модели <see cref="WeekType"/>.
+    /// </summary>
+    internal class Configuration : Configuration<WeekType>
+    {
+        /// <summary>
+        /// Конструктор.
+        /// </summary>
+        /// <param name="configuration">Конфигурация базы данных.</param>
+        public Configuration(DatabaseConfiguration configuration) : base(configuration) { }
+
+        /// <summary>
+        /// Задать конфигурацию для модели.
+        /// </summary>
+        /// <param name="builder">Набор интерфейсов настройки модели.</param>
+        public override void Configure(EntityTypeBuilder<WeekType> builder)
+        {
+            builder.Property(type => type.Name)
+                .HasMaxLength(NameLengthMax)
+                .IsRequired();
+
+            base.Configure(builder);
+        }
+    }
+    
     /*                   __ _                       _   _
      *   ___ ___  _ __  / _(_) __ _ _   _ _ __ __ _| |_(_) ___  _ __
      *  / __/ _ \| '_ \| |_| |/ _` | | | | '__/ _` | __| |/ _ \| '_ \

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Studenda.Library.Data.Configuration.Database;
+using Studenda.Library.Data.Configuration;
 
 namespace Studenda.Library.Data;
 
@@ -10,7 +10,7 @@ namespace Studenda.Library.Data;
 ///
 /// TODO: Добавить поддержку внешней базы данных.
 /// </summary>
-public class ApplicationContext : DataContext
+public sealed class ApplicationContext : DataContext
 {
     /// <summary>
     /// Конструктор.

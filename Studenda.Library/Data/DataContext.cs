@@ -1,9 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using Studenda.Library.Data.Configuration.Database;
-using Studenda.Library.Data.Configuration.Model.Account;
-using Studenda.Library.Data.Configuration.Model.Common;
-using Studenda.Library.Data.Configuration.Model.Link;
+using Studenda.Library.Data.Configuration;
 using Studenda.Library.Model;
 using Studenda.Library.Model.Account;
 using Studenda.Library.Model.Common;
@@ -33,7 +29,7 @@ public abstract class DataContext : DbContext
     /// Конструктор.
     /// </summary>
     /// <param name="configuration">Конфигурация базы данных.</param>
-    public DataContext(DatabaseConfiguration configuration) : base()
+    protected DataContext(DatabaseConfiguration configuration)
     {
         Configuration = configuration;
     }
@@ -41,7 +37,7 @@ public abstract class DataContext : DbContext
     /// <summary>
     /// Конфигурация базы данных.
     /// </summary>
-    protected DatabaseConfiguration Configuration { get; private set; }
+    private DatabaseConfiguration Configuration { get; }
 
     /// <summary>
     /// Набор объектов <see cref="User"/>.
@@ -86,13 +82,13 @@ public abstract class DataContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Использование Fluent API.
-        modelBuilder.ApplyConfiguration(new UserConfiguration(Configuration));
-        modelBuilder.ApplyConfiguration(new UserRoleConfiguration(Configuration));
-        modelBuilder.ApplyConfiguration(new DepartmentConfiguration(Configuration));
-        modelBuilder.ApplyConfiguration(new CourseConfiguration(Configuration));
-        modelBuilder.ApplyConfiguration(new GroupConfiguration(Configuration));
-        modelBuilder.ApplyConfiguration(new WeekTypeConfiguration(Configuration));
-        modelBuilder.ApplyConfiguration(new UserGroupLinkConfiguration());
+        modelBuilder.ApplyConfiguration(new User.Configuration(Configuration));
+        modelBuilder.ApplyConfiguration(new UserRole.Configuration(Configuration));
+        modelBuilder.ApplyConfiguration(new Department.Configuration(Configuration));
+        modelBuilder.ApplyConfiguration(new Course.Configuration(Configuration));
+        modelBuilder.ApplyConfiguration(new Group.Configuration(Configuration));
+        modelBuilder.ApplyConfiguration(new WeekType.Configuration(Configuration));
+        modelBuilder.ApplyConfiguration(new UserGroupLink.Configuration());
 
         base.OnModelCreating(modelBuilder);
     }
@@ -116,7 +112,7 @@ public abstract class DataContext : DbContext
     /// <param name="acceptAllChangesOnSuccess">Флаг принятия всех изменений при успехе операции.</param>
     /// <param name="cancellationToken">Токен отмены.</param>
     /// <returns>Таск, представляющий операцию асинхронного сохранения с количеством затронутых записей.</returns>
-    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default(CancellationToken))
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
     {
         UpdateTrackedEntityMetadata();
 
@@ -140,7 +136,7 @@ public abstract class DataContext : DbContext
 
         foreach (var entry in entries)
         {
-            if (!(entry.Entity is Entity entity))
+            if (entry.Entity is not Entity entity)
             {
                 continue;
             }

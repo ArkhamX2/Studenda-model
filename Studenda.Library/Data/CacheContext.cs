@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Studenda.Library.Data.Configuration.Database;
+using Studenda.Library.Data.Configuration;
 
 namespace Studenda.Library.Data;
 
@@ -9,7 +9,7 @@ namespace Studenda.Library.Data;
 /// Используется для кеширования дольших объемов
 /// редко изменяющихся данных.
 /// </summary>
-public class CacheContext : DataContext
+public sealed class CacheContext : DataContext
 {
     /// <summary>
     /// Конструктор.
