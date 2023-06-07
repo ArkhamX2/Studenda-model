@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Studenda.Library.Data.Configuration;
+using Studenda.Model.Data.Configuration;
 
-namespace Studenda.Library.Data;
+namespace Studenda.Model.Data;
 
 /// <summary>
 /// Сессия работы с внешней базой данных.

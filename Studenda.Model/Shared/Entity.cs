@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Studenda.Library.Data.Configuration;
+using Studenda.Model.Data.Configuration;
 
-namespace Studenda.Library.Model;
+namespace Studenda.Model.Shared;
 
 /// <summary>
 /// Модель стандартного объекта с соответствующей
@@ -17,7 +17,7 @@ public abstract class Entity
 	/// включая биндинг полей под данные,
 	/// создание зависимостей и маппинг в базе данных.
 	/// </summary>
-	/// <typeparam name="T">Модель стандартного объекта.</typeparam>
+	/// <typeparam name="T"><see cref="Entity"/></typeparam>
 	internal abstract class Configuration<T> : IEntityTypeConfiguration<T> where T : Entity
 	{
 		/// <summary>

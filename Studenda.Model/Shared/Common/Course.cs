@@ -1,17 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Studenda.Library.Data.Configuration;
+using System.Text.RegularExpressions;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Studenda.Model.Data.Configuration;
 
-namespace Studenda.Library.Model.Common;
+namespace Studenda.Model.Shared.Common;
 
 /// <summary>
-/// Факультет.
+/// Курс.
 /// </summary>
-public class Department : Entity
+public class Course : Entity
 {
     /// <summary>
-    /// Конфигурация модели <see cref="Department"/>.
+    /// Конфигурация модели <see cref="Course"/>.
     /// </summary>
-    internal class Configuration : Configuration<Department>
+    internal class Configuration : Configuration<Course>
     {
         /// <summary>
         /// Конструктор.
@@ -23,15 +24,20 @@ public class Department : Entity
         /// Задать конфигурацию для модели.
         /// </summary>
         /// <param name="builder">Набор интерфейсов настройки модели.</param>
-        public override void Configure(EntityTypeBuilder<Department> builder)
+        public override void Configure(EntityTypeBuilder<Course> builder)
         {
-            builder.Property(department => department.Name)
+            builder.Property(course => course.Name)
                 .HasMaxLength(NameLengthMax)
                 .IsRequired();
 
-            builder.HasMany(department => department.Courses)
-                .WithOne(course => course.Department)
-                .HasForeignKey(course => course.DepartmentId);
+            builder.HasOne(course => course.Department)
+                .WithMany(department => department.Courses)
+                .HasForeignKey(course => course.DepartmentId)
+                .IsRequired();
+
+            builder.HasMany(course => course.Groups)
+                .WithOne(group => group.Course)
+                .HasForeignKey(group => group.CourseId);
 
             base.Configure(builder);
         }
@@ -74,6 +80,11 @@ public class Department : Entity
     #region Entity
 
     /// <summary>
+    /// Идентификатор связанного объекта <see cref="Common.Department"/>.
+    /// </summary>
+    public int DepartmentId { get; set; }
+
+    /// <summary>
     /// Название.
     /// </summary>
     public string Name { get; set; } = null!;
@@ -81,7 +92,12 @@ public class Department : Entity
     #endregion
 
     /// <summary>
-    /// Связанные объекты <see cref="Course"/>.
+    /// Связанный объект <see cref="Common.Department"/>.
     /// </summary>
-    public List<Course> Courses { get; set; } = null!;
+    public Department Department { get; set; } = null!;
+
+    /// <summary>
+    /// Связанные объекты <see cref="Group"/>.
+    /// </summary>
+    public List<Group> Groups { get; set; } = null!;
 }

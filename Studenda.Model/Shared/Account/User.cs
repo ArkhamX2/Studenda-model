@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Studenda.Library.Data.Configuration;
-using Studenda.Library.Model.Link;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Studenda.Model.Data.Configuration;
+using Studenda.Model.Shared.Link;
 
-namespace Studenda.Library.Model.Account;
+namespace Studenda.Model.Shared.Account;
 
 /// <summary>
 /// Пользователь.

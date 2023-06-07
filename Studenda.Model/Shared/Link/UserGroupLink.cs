@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Studenda.Library.Model.Account;
-using Studenda.Library.Model.Common;
+using Studenda.Model.Shared.Account;
+using Studenda.Model.Shared.Common;
 
-namespace Studenda.Library.Model.Link;
+namespace Studenda.Model.Shared.Link;
 
 /// <summary>
 /// Связь многие ко многим для <see cref="Account.User"/> и <see cref="Common.Group"/>.

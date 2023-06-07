@@ -1,18 +1,18 @@
-﻿namespace Studenda.Library.Data.Configuration;
+namespace Studenda.Model.Data.Configuration;
 
 /// <summary>
-/// Конфигурация базы данных SQLite.
+/// Конфигурация базы данных.
 /// </summary>
-public class SqliteConfiguration : DatabaseConfiguration
+public abstract class DatabaseConfiguration
 {
     /// <summary>
     /// Тип полей даты и времени.
     /// </summary>
-    public override string DateTimeType => "TEXT";
+    public abstract string DateTimeType { get; }
 
     /// <summary>
     /// Указатель использования текущих даты и времени
     /// для полей типа <see cref="DateTimeType"/>.
     /// </summary>
-    public override string DateTimeValueCurrent => "CURRENT_TIMESTAMP";
+    public abstract string DateTimeValueCurrent { get; }
 }

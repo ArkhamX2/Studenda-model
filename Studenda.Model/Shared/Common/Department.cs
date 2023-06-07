@@ -1,17 +1,17 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Studenda.Library.Data.Configuration;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Studenda.Model.Data.Configuration;
 
-namespace Studenda.Library.Model.Common;
+namespace Studenda.Model.Shared.Common;
 
 /// <summary>
-/// Тип учебной недели.
+/// Факультет.
 /// </summary>
-public class WeekType : Entity
+public class Department : Entity
 {
     /// <summary>
-    /// Конфигурация модели <see cref="WeekType"/>.
+    /// Конфигурация модели <see cref="Department"/>.
     /// </summary>
-    internal class Configuration : Configuration<WeekType>
+    internal class Configuration : Configuration<Department>
     {
         /// <summary>
         /// Конструктор.
@@ -23,11 +23,15 @@ public class WeekType : Entity
         /// Задать конфигурацию для модели.
         /// </summary>
         /// <param name="builder">Набор интерфейсов настройки модели.</param>
-        public override void Configure(EntityTypeBuilder<WeekType> builder)
+        public override void Configure(EntityTypeBuilder<Department> builder)
         {
-            builder.Property(type => type.Name)
+            builder.Property(department => department.Name)
                 .HasMaxLength(NameLengthMax)
                 .IsRequired();
+
+            builder.HasMany(department => department.Courses)
+                .WithOne(course => course.Department)
+                .HasForeignKey(course => course.DepartmentId);
 
             base.Configure(builder);
         }
@@ -53,7 +57,7 @@ public class WeekType : Entity
     /// <summary>
     /// Максимальная длина поля <see cref="Name"/>.
     /// </summary>
-    public const int NameLengthMax = 32;
+    public const int NameLengthMax = 128;
 
     #endregion
 
@@ -75,4 +79,9 @@ public class WeekType : Entity
     public string Name { get; set; } = null!;
 
     #endregion
+
+    /// <summary>
+    /// Связанные объекты <see cref="Course"/>.
+    /// </summary>
+    public List<Course> Courses { get; set; } = null!;
 }
