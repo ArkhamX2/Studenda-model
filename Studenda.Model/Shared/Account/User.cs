@@ -46,10 +46,10 @@ public class User : Entity
                 .HasMaxLength(PasswordHashLengthMax)
                 .IsRequired(IsPasswordHashRequired);
 
-            builder.HasOne(user => user.UserRole)
+            builder.HasOne(user => user.Role)
                 .WithMany(role => role.Users)
-                .HasForeignKey(user => user.UserRoleId)
-                .IsRequired(IsUserRoleIdRequired);
+                .HasForeignKey(user => user.RoleId)
+                .IsRequired(IsRoleIdRequired);
 
             builder.HasMany(user => user.UserGroupLinks)
                 .WithOne(link => link.User)
@@ -97,9 +97,9 @@ public class User : Entity
     public const int PasswordHashLengthMax = 256;
 
     /// <summary>
-    /// Статус необходимости наличия значения в поле <see cref="UserRole"/>.
+    /// Статус необходимости наличия значения в поле <see cref="RoleId"/>.
     /// </summary>
-    public const bool IsUserRoleIdRequired = true;
+    public const bool IsRoleIdRequired = true;
 
     /// <summary>
     /// Статус необходимости наличия значения в поле <see cref="Name"/>.
@@ -140,9 +140,9 @@ public class User : Entity
     #region Entity
 
     /// <summary>
-    /// Идентификатор связанного объекта <see cref="Account.UserRole"/>.
+    /// Идентификатор связанного объекта <see cref="Role"/>.
     /// </summary>
-    public int UserRoleId { get; set; }
+    public int RoleId { get; set; }
 
     /// <summary>
     /// Имя.
@@ -175,12 +175,12 @@ public class User : Entity
     #endregion
 
     /// <summary>
-    /// Связанный объект <see cref="Account.UserRole"/>.
+    /// Связанный объект <see cref="Role"/>.
     /// </summary>
-    public UserRole UserRole { get; set; } = null!;
+    public Role Role { get; set; } = null!;
 
     /// <summary>
-    /// Связанный объект <see cref="UserGroupLink"/>.
+    /// Связанные объекты <see cref="UserGroupLink"/>.
     /// </summary>
     public List<UserGroupLink> UserGroupLinks { get; set; } = null!;
 }

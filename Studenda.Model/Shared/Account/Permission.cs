@@ -2,17 +2,18 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Studenda.Model.Data.Configuration;
 using Studenda.Model.Shared.Link;
 
-namespace Studenda.Model.Shared.Common;
+namespace Studenda.Model.Shared.Account;
 
 /// <summary>
-/// Группа.
+/// Разрешение для <see cref="Role"/>.
+/// Обозначает некоторый доступ к некоторой функции.
 /// </summary>
-public class Group : Entity
+public class Permission : Entity
 {
     /// <summary>
-    /// Конфигурация модели <see cref="Group"/>.
+    /// Конфигурация модели <see cref="Permission"/>.
     /// </summary>
-    internal class Configuration : Configuration<Group>
+    internal class Configuration : Configuration<Permission>
     {
         /// <summary>
         /// Конструктор.
@@ -24,20 +25,15 @@ public class Group : Entity
         /// Задать конфигурацию для модели.
         /// </summary>
         /// <param name="builder">Набор интерфейсов настройки модели.</param>
-        public override void Configure(EntityTypeBuilder<Group> builder)
+        public override void Configure(EntityTypeBuilder<Permission> builder)
         {
-            builder.Property(group => group.Name)
+            builder.Property(permission => permission.Name)
                 .HasMaxLength(NameLengthMax)
                 .IsRequired(IsNameRequired);
 
-            builder.HasOne(group => group.Course)
-                .WithMany(course => course.Groups)
-                .HasForeignKey(group => group.CourseId)
-                .IsRequired(IsCourseIdRequired);
-
-            builder.HasMany(group => group.UserGroupLinks)
-                .WithOne(link => link.Group)
-                .HasForeignKey(link => link.GroupId);
+            builder.HasMany(permission => permission.RolePermissionLinks)
+                .WithOne(link => link.Permission)
+                .HasForeignKey(link => link.PermissionId);
 
             base.Configure(builder);
         }
@@ -60,17 +56,12 @@ public class Group : Entity
     public const int NameLengthMax = 128;
 
     /// <summary>
-    /// Статус необходимости наличия значения в поле <see cref="CourseId"/>.
-    /// </summary>
-    public const bool IsCourseIdRequired = true;
-
-    /// <summary>
     /// Статус необходимости наличия значения в поле <see cref="Name"/>.
     /// </summary>
     public const bool IsNameRequired = true;
 
     #endregion
-
+    
     /*             _   _ _
      *   ___ _ __ | |_(_) |_ _   _
      *  / _ \ '_ \| __| | __| | | |
@@ -83,11 +74,6 @@ public class Group : Entity
     #region Entity
 
     /// <summary>
-    /// Идентификатор связанного объекта <see cref="Common.Course"/>.
-    /// </summary>
-    public int CourseId { get; set; }
-
-    /// <summary>
     /// Название.
     /// </summary>
     public string Name { get; set; } = null!;
@@ -95,12 +81,7 @@ public class Group : Entity
     #endregion
 
     /// <summary>
-    /// Связанный объект <see cref="Common.Course"/>.
+    /// Связанные объекты <see cref="RolePermissionLink"/>.
     /// </summary>
-    public Course Course { get; set; } = null!;
-
-    /// <summary>
-    /// Связанные объекты <see cref="UserGroupLink"/>.
-    /// </summary>
-    public List<UserGroupLink> UserGroupLinks { get; set; } = null!;
+    public List<RolePermissionLink> RolePermissionLinks { get; set; } = null!;
 }

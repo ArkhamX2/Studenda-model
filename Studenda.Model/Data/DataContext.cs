@@ -45,9 +45,14 @@ public abstract class DataContext : DbContext
     public DbSet<User> Users => Set<User>();
 
     /// <summary>
-    /// Набор объектов <see cref="UserRole"/>.
+    /// Набор объектов <see cref="Role"/>.
     /// </summary>
-    public DbSet<UserRole> UserRoles => Set<UserRole>();
+    public DbSet<Role> Roles => Set<Role>();
+
+    /// <summary>
+    /// Набор объектов <see cref="Permission"/>.
+    /// </summary>
+    public DbSet<Permission> Permissions => Set<Permission>();
 
     /// <summary>
     /// Набор объектов <see cref="Department"/>.
@@ -75,6 +80,11 @@ public abstract class DataContext : DbContext
     public DbSet<UserGroupLink> UserGroupLinks => Set<UserGroupLink>();
 
     /// <summary>
+    /// Набор объектов <see cref="RolePermissionLink"/>.
+    /// </summary>
+    public DbSet<RolePermissionLink> RolePermissionLinks => Set<RolePermissionLink>();
+
+    /// <summary>
     /// Обработать инициализацию модели.
     /// Используется для дополнительной настройки модели.
     /// </summary>
@@ -83,12 +93,14 @@ public abstract class DataContext : DbContext
     {
         // Использование Fluent API.
         modelBuilder.ApplyConfiguration(new User.Configuration(Configuration));
-        modelBuilder.ApplyConfiguration(new UserRole.Configuration(Configuration));
+        modelBuilder.ApplyConfiguration(new Role.Configuration(Configuration));
+        modelBuilder.ApplyConfiguration(new Permission.Configuration(Configuration));
         modelBuilder.ApplyConfiguration(new Department.Configuration(Configuration));
         modelBuilder.ApplyConfiguration(new Course.Configuration(Configuration));
         modelBuilder.ApplyConfiguration(new Group.Configuration(Configuration));
         modelBuilder.ApplyConfiguration(new WeekType.Configuration(Configuration));
         modelBuilder.ApplyConfiguration(new UserGroupLink.Configuration());
+        modelBuilder.ApplyConfiguration(new RolePermissionLink.Configuration());
 
         base.OnModelCreating(modelBuilder);
     }

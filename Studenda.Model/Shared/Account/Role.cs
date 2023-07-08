@@ -1,18 +1,18 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Studenda.Model.Data.Configuration;
+using Studenda.Model.Shared.Link;
 
 namespace Studenda.Model.Shared.Account;
 
 /// <summary>
-/// Роль пользователя.
-/// TODO: Обозначить права доступа.
+/// Роль для <see cref="User"/>.
 /// </summary>
-public class UserRole : Entity
+public class Role : Entity
 {
     /// <summary>
     /// Конфигурация модели <see cref="User"/>.
     /// </summary>
-    internal class Configuration : Configuration<UserRole>
+    internal class Configuration : Configuration<Role>
     {
         /// <summary>
         /// Конструктор.
@@ -24,15 +24,19 @@ public class UserRole : Entity
         /// Задать конфигурацию для модели.
         /// </summary>
         /// <param name="builder">Набор интерфейсов настройки модели.</param>
-        public override void Configure(EntityTypeBuilder<UserRole> builder)
+        public override void Configure(EntityTypeBuilder<Role> builder)
         {
             builder.Property(role => role.Name)
                 .HasMaxLength(User.NameLengthMax)
                 .IsRequired(IsNameRequired);
 
             builder.HasMany(role => role.Users)
-                .WithOne(user => user.UserRole)
-                .HasForeignKey(user => user.UserRoleId);
+                .WithOne(user => user.Role)
+                .HasForeignKey(user => user.RoleId);
+
+            builder.HasMany(role => role.RolePermissionLinks)
+                .WithOne(link => link.Role)
+                .HasForeignKey(link => link.RoleId);
 
             base.Configure(builder);
         }
@@ -83,4 +87,9 @@ public class UserRole : Entity
     /// Связанные объекты <see cref="User"/>.
     /// </summary>
     public List<User> Users { get; set; } = null!;
+
+    /// <summary>
+    /// Связанные объекты <see cref="RolePermissionLink"/>.
+    /// </summary>
+    public List<RolePermissionLink> RolePermissionLinks { get; set; } = null!;
 }
