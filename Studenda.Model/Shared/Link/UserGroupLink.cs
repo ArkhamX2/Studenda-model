@@ -29,13 +29,39 @@ public class UserGroupLink
 
             builder.HasOne(link => link.User)
                 .WithMany(user => user.UserGroupLinks)
-                .HasForeignKey(link => link.UserId);
+                .HasForeignKey(link => link.UserId)
+                .IsRequired(IsUserIdRequired);
 
             builder.HasOne(link => link.Group)
                 .WithMany(group => group.UserGroupLinks)
-                .HasForeignKey(link => link.GroupId);
+                .HasForeignKey(link => link.GroupId)
+                .IsRequired(IsGroupIdRequired);
         }
     }
+    
+    /*                   __ _                       _   _
+     *   ___ ___  _ __  / _(_) __ _ _   _ _ __ __ _| |_(_) ___  _ __
+     *  / __/ _ \| '_ \| |_| |/ _` | | | | '__/ _` | __| |/ _ \| '_ \
+     * | (_| (_) | | | |  _| | (_| | |_| | | | (_| | |_| | (_) | | | |
+     *  \___\___/|_| |_|_| |_|\__, |\__,_|_|  \__,_|\__|_|\___/|_| |_|
+     *                        |___/
+     *
+     * Константы, задающие базовые конфигурации полей
+     * и ограничения модели.
+     */
+    #region Configuration
+
+    /// <summary>
+    /// Статус необходимости наличия значения в поле <see cref="UserId"/>.
+    /// </summary>
+    public const bool IsUserIdRequired = true;
+
+    /// <summary>
+    /// Статус необходимости наличия значения в поле <see cref="GroupId"/>.
+    /// </summary>
+    public const bool IsGroupIdRequired = true;
+
+    #endregion
     
     /*             _   _ _
      *   ___ _ __ | |_(_) |_ _   _

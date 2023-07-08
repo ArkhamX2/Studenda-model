@@ -48,6 +48,29 @@ public abstract class Entity
 				.HasColumnType(DatabaseConfiguration.DateTimeType);
 		}
 	}
+    
+	/*                   __ _                       _   _
+	 *   ___ ___  _ __  / _(_) __ _ _   _ _ __ __ _| |_(_) ___  _ __
+	 *  / __/ _ \| '_ \| |_| |/ _` | | | | '__/ _` | __| |/ _ \| '_ \
+	 * | (_| (_) | | | |  _| | (_| | |_| | | | (_| | |_| | (_) | | | |
+	 *  \___\___/|_| |_|_| |_|\__, |\__,_|_|  \__,_|\__|_|\___/|_| |_|
+	 *                        |___/
+	 * Константы, задающие базовые конфигурации полей
+	 * и ограничения модели.
+	 */
+	#region Configuration
+
+	/// <summary>
+	/// Статус необходимости наличия значения в поле <see cref="CreatedAt"/>.
+	/// </summary>
+	private const bool IsCreatedAtRequired = false;
+
+	/// <summary>
+	/// Статус необходимости наличия значения в поле <see cref="UpdatedAt"/>.
+	/// </summary>
+	private const bool IsUpdatedAtRequired = false;
+	
+	#endregion
 	
     /*             _   _ _
      *   ___ _ __ | |_(_) |_ _   _
@@ -55,7 +78,6 @@ public abstract class Entity
      * |  __/ | | | |_| | |_| |_| |
      *  \___|_| |_|\__|_|\__|\__, |
      *                       |___/
-     *
      * Поля данных, соответствующие таковым в таблице
      * модели в базе данных.
      */

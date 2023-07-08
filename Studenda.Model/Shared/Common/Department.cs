@@ -27,7 +27,7 @@ public class Department : Entity
         {
             builder.Property(department => department.Name)
                 .HasMaxLength(NameLengthMax)
-                .IsRequired();
+                .IsRequired(IsNameRequired);
 
             builder.HasMany(department => department.Courses)
                 .WithOne(course => course.Department)
@@ -43,21 +43,20 @@ public class Department : Entity
      * | (_| (_) | | | |  _| | (_| | |_| | | | (_| | |_| | (_) | | | |
      *  \___\___/|_| |_|_| |_|\__, |\__,_|_|  \__,_|\__|_|\___/|_| |_|
      *                        |___/
-     *
      * Константы, задающие базовые конфигурации полей
      * и ограничения модели.
      */
     #region Configuration
 
     /// <summary>
-    /// Минимальная длина поля <see cref="Name"/>.
-    /// </summary>
-    public const int NameLengthMin = 1;
-
-    /// <summary>
     /// Максимальная длина поля <see cref="Name"/>.
     /// </summary>
     public const int NameLengthMax = 128;
+
+    /// <summary>
+    /// Статус необходимости наличия значения в поле <see cref="Name"/>.
+    /// </summary>
+    public const bool IsNameRequired = true;
 
     #endregion
 
@@ -67,7 +66,6 @@ public class Department : Entity
      * |  __/ | | | |_| | |_| |_| |
      *  \___|_| |_|\__|_|\__|\__, |
      *                       |___/
-     *
      * Поля данных, соответствующие таковым в таблице
      * модели в базе данных.
      */

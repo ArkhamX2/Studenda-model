@@ -27,7 +27,7 @@ public class WeekType : Entity
         {
             builder.Property(type => type.Name)
                 .HasMaxLength(NameLengthMax)
-                .IsRequired();
+                .IsRequired(IsNameRequired);
 
             base.Configure(builder);
         }
@@ -46,14 +46,14 @@ public class WeekType : Entity
     #region Configuration
 
     /// <summary>
-    /// Минимальная длина поля <see cref="Name"/>.
-    /// </summary>
-    public const int NameLengthMin = 1;
-
-    /// <summary>
     /// Максимальная длина поля <see cref="Name"/>.
     /// </summary>
     public const int NameLengthMax = 32;
+
+    /// <summary>
+    /// Статус необходимости наличия значения в поле <see cref="Name"/>.
+    /// </summary>
+    public const bool IsNameRequired = true;
 
     #endregion
 
