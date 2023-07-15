@@ -27,7 +27,7 @@ public class WeekType : Entity
         {
             builder.Property(type => type.Name)
                 .HasMaxLength(NameLengthMax)
-                .IsRequired();
+                .IsRequired(IsNameRequired);
 
             base.Configure(builder);
         }
@@ -39,21 +39,20 @@ public class WeekType : Entity
      * | (_| (_) | | | |  _| | (_| | |_| | | | (_| | |_| | (_) | | | |
      *  \___\___/|_| |_|_| |_|\__, |\__,_|_|  \__,_|\__|_|\___/|_| |_|
      *                        |___/
-     *
      * Константы, задающие базовые конфигурации полей
      * и ограничения модели.
      */
     #region Configuration
 
     /// <summary>
-    /// Минимальная длина поля <see cref="Name"/>.
-    /// </summary>
-    public const int NameLengthMin = 1;
-
-    /// <summary>
     /// Максимальная длина поля <see cref="Name"/>.
     /// </summary>
     public const int NameLengthMax = 32;
+
+    /// <summary>
+    /// Статус необходимости наличия значения в поле <see cref="Name"/>.
+    /// </summary>
+    public const bool IsNameRequired = true;
 
     #endregion
 
@@ -63,7 +62,6 @@ public class WeekType : Entity
      * |  __/ | | | |_| | |_| |_| |
      *  \___|_| |_|\__|_|\__|\__, |
      *                       |___/
-     *
      * Поля данных, соответствующие таковым в таблице
      * модели в базе данных.
      */

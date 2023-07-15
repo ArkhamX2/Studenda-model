@@ -2,6 +2,7 @@
 using Studenda.Model.Data;
 using Studenda.Model.Data.Configuration;
 using Studenda.Model.Shared.Common;
+using Studenda.Model.Shared.Link;
 
 Console.WriteLine("Starting INSERT test...");
 
@@ -45,7 +46,9 @@ using (var context = new ApplicationContext(new SqliteConfiguration()))
             .ThenInclude(course => course.Department)
         .Include(group => group.UserGroupLinks)
             .ThenInclude(link => link.User)
-                .ThenInclude(user => user.UserRole)
+                .ThenInclude(user => user.Role)
+                    .ThenInclude(role => role.RolePermissionLinks)
+                        .ThenInclude(link => link.Permission)
         .ToList();
 
     Console.WriteLine(groups.Count);

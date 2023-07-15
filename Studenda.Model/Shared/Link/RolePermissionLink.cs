@@ -1,41 +1,40 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Studenda.Model.Shared.Account;
-using Studenda.Model.Shared.Common;
 
 namespace Studenda.Model.Shared.Link;
 
 /// <summary>
-/// Связь многие ко многим для <see cref="Account.User"/> и <see cref="Common.Group"/>.
+/// Связь многие ко многим для <see cref="Account.Role"/> и <see cref="Account.Permission"/>.
 /// </summary>
-public class UserGroupLink
+public class RolePermissionLink
 {
     /// <summary>
-    /// Конфигурация модели <see cref="UserGroupLink"/>.
+    /// Конфигурация модели <see cref="RolePermissionLink"/>.
     /// </summary>
-    internal class Configuration : IEntityTypeConfiguration<UserGroupLink>
+    internal class Configuration : IEntityTypeConfiguration<RolePermissionLink>
     {
         /// <summary>
         /// Задать конфигурацию для модели.
         /// </summary>
         /// <param name="builder">Набор интерфейсов настройки модели.</param>
-        public void Configure(EntityTypeBuilder<UserGroupLink> builder)
+        public void Configure(EntityTypeBuilder<RolePermissionLink> builder)
         {
             builder.HasKey(link => new
             {
-                link.UserId,
-                link.GroupId
+                link.RoleId,
+                link.PermissionId
             });
 
-            builder.HasOne(link => link.User)
-                .WithMany(user => user.UserGroupLinks)
-                .HasForeignKey(link => link.UserId)
-                .IsRequired(IsUserIdRequired);
+            builder.HasOne(link => link.Role)
+                .WithMany(role => role.RolePermissionLinks)
+                .HasForeignKey(link => link.RoleId)
+                .IsRequired(IsRoleIdRequired);
 
-            builder.HasOne(link => link.Group)
-                .WithMany(group => group.UserGroupLinks)
-                .HasForeignKey(link => link.GroupId)
-                .IsRequired(IsGroupIdRequired);
+            builder.HasOne(link => link.Permission)
+                .WithMany(permission => permission.RolePermissionLinks)
+                .HasForeignKey(link => link.PermissionId)
+                .IsRequired(IsPermissionIdRequired);
         }
     }
     
@@ -51,14 +50,14 @@ public class UserGroupLink
     #region Configuration
 
     /// <summary>
-    /// Статус необходимости наличия значения в поле <see cref="UserId"/>.
+    /// Статус необходимости наличия значения в поле <see cref="RoleId"/>.
     /// </summary>
-    public const bool IsUserIdRequired = true;
+    public const bool IsRoleIdRequired = true;
 
     /// <summary>
-    /// Статус необходимости наличия значения в поле <see cref="GroupId"/>.
+    /// Статус необходимости наличия значения в поле <see cref="PermissionId"/>.
     /// </summary>
-    public const bool IsGroupIdRequired = true;
+    public const bool IsPermissionIdRequired = true;
 
     #endregion
     
@@ -74,24 +73,24 @@ public class UserGroupLink
     #region Entity
 
     /// <summary>
-    /// Идентификатор связанного объекта <see cref="Account.User"/>.
+    /// Идентификатор связанного объекта <see cref="Account.Role"/>.
     /// </summary>
-    public int UserId { get; set; }
+    public int RoleId { get; set; }
 
     /// <summary>
-    /// Идентификатор связанного объекта <see cref="Common.Group"/>.
+    /// Идентификатор связанного объекта <see cref="Account.Permission"/>.
     /// </summary>
-    public int GroupId { get; set; }
+    public int PermissionId { get; set; }
 
     #endregion
 
     /// <summary>
-    /// Связанный объект <see cref="Account.User"/>.
+    /// Связанный объект <see cref="Account.Role"/>.
     /// </summary>
-    public User User { get; set; } = null!;
+    public Role Role { get; set; } = null!;
 
     /// <summary>
-    /// Связанный объект <see cref="Common.Group"/>.
+    /// Связанный объект <see cref="Account.Permission"/>.
     /// </summary>
-    public Group Group { get; set; } = null!;
+    public Permission Permission { get; set; } = null!;
 }
