@@ -166,7 +166,6 @@ public sealed class DataContext : DbContext
     /// для обновления записей нужно сперва загрузить эти
     /// записи в кеш сессии, чтобы трекер корректно
     /// зафиксировал изменения.
-    /// TODO: Возможно, это не лучшее решение. Необходимы тесты.
     /// </summary>
     private void UpdateTrackedEntityMetadata()
     {
@@ -180,17 +179,11 @@ public sealed class DataContext : DbContext
                 continue;
             }
             
-            // TODO: DateTime.Now возвращает текущие дату и время на устройстве, что может быть опасно при вставке в базу данных.
-
-            // Добавлен новый объект.
-            if (entry.State == EntityState.Added)
-            {
-                entity.CreatedAt = DateTime.Now;
-            }
-
             // Обновлен существующий объект.
             if (entry.State == EntityState.Modified)
             {
+                // Текущая дата и время на устройстве.
+                // Нельзя допустить, чтобы эти данные передавались во внешние хранилища.
                 entity.UpdatedAt = DateTime.Now;
             }
         }

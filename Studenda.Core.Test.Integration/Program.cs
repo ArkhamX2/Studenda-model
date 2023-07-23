@@ -9,7 +9,7 @@ const bool isDebugMode = true;
 const bool isDebugMode = false;
 #endif
 
-var configuration = new SqliteConfiguration("Data Source=cache.db", isDebugMode);
+var configuration = new SqliteConfiguration("Data Source=000_debug_storage.db", isDebugMode);
 
 Console.WriteLine("Starting INSERT test...");
 
