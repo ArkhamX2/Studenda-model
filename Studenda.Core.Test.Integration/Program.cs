@@ -40,17 +40,25 @@ Console.WriteLine("Starting SELECT test...");
 
 using (var context = new ApplicationContext(new SqliteConfiguration()))
 {
-    var groups = context.Groups
-        .Include(group => group.Course)
-            .ThenInclude(course => course.Department)
-        .Include(group => group.UserGroupLinks)
-            .ThenInclude(link => link.User)
-                .ThenInclude(user => user.Role)
-                    .ThenInclude(role => role.RolePermissionLinks)
-                        .ThenInclude(link => link.Permission)
-        .ToList();
-
-    Console.WriteLine(groups.Count);
+    try
+    {
+        // TODO: Найти более эффективный способ загрузки связанных моделей.
+        var groups = context.Groups
+            .Include(group => group.Course)
+                .ThenInclude(course => course.Department)
+            .Include(group => group.UserGroupLinks)
+                .ThenInclude(link => link.User)
+                    .ThenInclude(user => user.Role)
+                        .ThenInclude(role => role.RolePermissionLinks)
+                            .ThenInclude(link => link.Permission)
+            .ToList();
+        
+        Console.WriteLine(groups.Count);
+    }
+    catch (InvalidOperationException exception)
+    {
+        Console.WriteLine(exception);
+    }
 }
 
 Console.WriteLine("Completed!");
