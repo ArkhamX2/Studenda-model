@@ -24,15 +24,15 @@ public abstract class Entity
 		/// Конструктор.
 		/// </summary>
 		/// <param name="configuration">Конфигурация базы данных.</param>
-		protected Configuration(DatabaseConfiguration configuration)
+		protected Configuration(ContextConfiguration configuration)
 		{
-			DatabaseConfiguration = configuration;
+			ContextConfiguration = configuration;
 		}
 
 		/// <summary>
 		/// Конфигурация базы данных.
 		/// </summary>
-		private DatabaseConfiguration DatabaseConfiguration { get; set; }
+		private ContextConfiguration ContextConfiguration { get; set; }
 
 		/// <summary>
 		/// Задать конфигурацию для модели.
@@ -41,11 +41,11 @@ public abstract class Entity
 		public virtual void Configure(EntityTypeBuilder<T> builder)
 		{
 			builder.Property(entity => entity.CreatedAt)
-				.HasColumnType(DatabaseConfiguration.DateTimeType)
-				.HasDefaultValueSql(DatabaseConfiguration.DateTimeValueCurrent);
+				.HasColumnType(ContextConfiguration.DateTimeType)
+				.HasDefaultValueSql(ContextConfiguration.DateTimeValueCurrent);
 
 			builder.Property(entity => entity.UpdatedAt)
-				.HasColumnType(DatabaseConfiguration.DateTimeType);
+				.HasColumnType(ContextConfiguration.DateTimeType);
 		}
 	}
     

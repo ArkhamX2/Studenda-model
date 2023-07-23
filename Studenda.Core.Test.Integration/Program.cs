@@ -3,9 +3,17 @@ using Studenda.Core.Data;
 using Studenda.Core.Data.Configuration;
 using Studenda.Core.Model.Common;
 
+#if DEBUG
+const bool isDebugMode = true;
+#else
+const bool isDebugMode = false;
+#endif
+
+var configuration = new SqliteConfiguration("Data Source=cache.db", isDebugMode);
+
 Console.WriteLine("Starting INSERT test...");
 
-using (var context = new ApplicationContext(new SqliteConfiguration()))
+using (var context = new DataContext(configuration))
 {
     var dept1 = new Department { Name = "dept1" };
     var dept2 = new Department { Name = "dept2" };
@@ -38,7 +46,7 @@ using (var context = new ApplicationContext(new SqliteConfiguration()))
 
 Console.WriteLine("Starting SELECT test...");
 
-using (var context = new ApplicationContext(new SqliteConfiguration()))
+using (var context = new DataContext(configuration))
 {
     try
     {
