@@ -184,7 +184,7 @@ public sealed class DataContext : DbContext
             {
                 // Текущая дата и время на устройстве.
                 // Нельзя допустить, чтобы эти данные передавались во внешние хранилища.
-                entity.UpdatedAt = DateTime.Now;
+                entity.UpdatedAt = DateTime.Now.ToUniversalTime();
             }
         }
     }
