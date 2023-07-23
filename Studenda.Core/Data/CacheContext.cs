@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Studenda.Core.Data.Configuration;
 
@@ -31,6 +32,8 @@ public sealed class CacheContext : DataContext
 
 #if DEBUG
         optionsBuilder.EnableSensitiveDataLogging();
+        optionsBuilder.ConfigureWarnings(builder => builder.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
+        
         optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
 #endif
 

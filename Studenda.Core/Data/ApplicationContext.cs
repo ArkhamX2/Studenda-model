@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Logging;
 using Studenda.Core.Data.Configuration;
 
@@ -40,6 +41,8 @@ public sealed class ApplicationContext : DataContext
         optionsBuilder.UseSqlite("Data Source=storage.db");
 
         optionsBuilder.EnableSensitiveDataLogging();
+        optionsBuilder.ConfigureWarnings(builder => builder.Throw(RelationalEventId.MultipleCollectionIncludeWarning));
+        
         optionsBuilder.LogTo(Console.WriteLine, LogLevel.Information);
 #else
         throw new NotImplementedException("RELEASE data source is not implemented yet!");
