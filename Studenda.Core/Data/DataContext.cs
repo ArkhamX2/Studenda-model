@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using Studenda.Model.Data.Configuration;
-using Studenda.Model.Shared;
-using Studenda.Model.Shared.Account;
-using Studenda.Model.Shared.Common;
-using Studenda.Model.Shared.Link;
+using Studenda.Core.Data.Configuration;
+using Studenda.Core.Model;
+using Studenda.Core.Model.Account;
+using Studenda.Core.Model.Common;
+using Studenda.Core.Model.Link;
 
-namespace Studenda.Model.Data;
+namespace Studenda.Core.Data;
 
 /// <summary>
 /// Сессия работы с базой данных.

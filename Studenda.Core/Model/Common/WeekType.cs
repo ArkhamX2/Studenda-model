@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Studenda.Model.Data.Configuration;
+using Studenda.Core.Data.Configuration;
 
-namespace Studenda.Model.Shared.Common;
+namespace Studenda.Core.Model.Common;
 
 /// <summary>
 /// Тип учебной недели.

@@ -1,18 +1,17 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Studenda.Model.Data.Configuration;
-using Studenda.Model.Shared.Link;
+using Studenda.Core.Data.Configuration;
 
-namespace Studenda.Model.Shared.Account;
+namespace Studenda.Core.Model.Common;
 
 /// <summary>
-/// Роль для <see cref="User"/>.
+/// Курс.
 /// </summary>
-public class Role : Entity
+public class Course : Entity
 {
     /// <summary>
-    /// Конфигурация модели <see cref="User"/>.
+    /// Конфигурация модели <see cref="Course"/>.
     /// </summary>
-    internal class Configuration : Configuration<Role>
+    internal class Configuration : Configuration<Course>
     {
         /// <summary>
         /// Конструктор.
@@ -24,19 +23,20 @@ public class Role : Entity
         /// Задать конфигурацию для модели.
         /// </summary>
         /// <param name="builder">Набор интерфейсов настройки модели.</param>
-        public override void Configure(EntityTypeBuilder<Role> builder)
+        public override void Configure(EntityTypeBuilder<Course> builder)
         {
-            builder.Property(role => role.Name)
-                .HasMaxLength(User.NameLengthMax)
+            builder.Property(course => course.Name)
+                .HasMaxLength(NameLengthMax)
                 .IsRequired(IsNameRequired);
 
-            builder.HasMany(role => role.Users)
-                .WithOne(user => user.Role)
-                .HasForeignKey(user => user.RoleId);
+            builder.HasOne(course => course.Department)
+                .WithMany(department => department.Courses)
+                .HasForeignKey(course => course.DepartmentId)
+                .IsRequired(IsDepartmentIdRequired);
 
-            builder.HasMany(role => role.RolePermissionLinks)
-                .WithOne(link => link.Role)
-                .HasForeignKey(link => link.RoleId);
+            builder.HasMany(course => course.Groups)
+                .WithOne(group => group.Course)
+                .HasForeignKey(group => group.CourseId);
 
             base.Configure(builder);
         }
@@ -59,6 +59,11 @@ public class Role : Entity
     public const int NameLengthMax = 128;
 
     /// <summary>
+    /// Статус необходимости наличия значения в поле <see cref="DepartmentId"/>.
+    /// </summary>
+    public const bool IsDepartmentIdRequired = true;
+
+    /// <summary>
     /// Статус необходимости наличия значения в поле <see cref="Name"/>.
     /// </summary>
     public const bool IsNameRequired = true;
@@ -77,6 +82,11 @@ public class Role : Entity
     #region Entity
 
     /// <summary>
+    /// Идентификатор связанного объекта <see cref="Common.Department"/>.
+    /// </summary>
+    public int DepartmentId { get; set; }
+
+    /// <summary>
     /// Название.
     /// </summary>
     public string Name { get; set; } = null!;
@@ -84,12 +94,12 @@ public class Role : Entity
     #endregion
 
     /// <summary>
-    /// Связанные объекты <see cref="User"/>.
+    /// Связанный объект <see cref="Common.Department"/>.
     /// </summary>
-    public List<User> Users { get; set; } = null!;
+    public Department Department { get; set; } = null!;
 
     /// <summary>
-    /// Связанные объекты <see cref="RolePermissionLink"/>.
+    /// Связанные объекты <see cref="Group"/>.
     /// </summary>
-    public List<RolePermissionLink> RolePermissionLinks { get; set; } = null!;
+    public List<Group> Groups { get; set; } = null!;
 }

@@ -1,18 +1,18 @@
-using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Studenda.Model.Data.Configuration;
+using Studenda.Core.Data.Configuration;
+using Studenda.Core.Model.Link;
 
-namespace Studenda.Model.Shared.Common;
+namespace Studenda.Core.Model.Common;
 
 /// <summary>
-/// Курс.
+/// Группа.
 /// </summary>
-public class Course : Entity
+public class Group : Entity
 {
     /// <summary>
-    /// Конфигурация модели <see cref="Course"/>.
+    /// Конфигурация модели <see cref="Group"/>.
     /// </summary>
-    internal class Configuration : Configuration<Course>
+    internal class Configuration : Configuration<Group>
     {
         /// <summary>
         /// Конструктор.
@@ -24,20 +24,20 @@ public class Course : Entity
         /// Задать конфигурацию для модели.
         /// </summary>
         /// <param name="builder">Набор интерфейсов настройки модели.</param>
-        public override void Configure(EntityTypeBuilder<Course> builder)
+        public override void Configure(EntityTypeBuilder<Group> builder)
         {
-            builder.Property(course => course.Name)
+            builder.Property(group => group.Name)
                 .HasMaxLength(NameLengthMax)
                 .IsRequired(IsNameRequired);
 
-            builder.HasOne(course => course.Department)
-                .WithMany(department => department.Courses)
-                .HasForeignKey(course => course.DepartmentId)
-                .IsRequired(IsDepartmentIdRequired);
+            builder.HasOne(group => group.Course)
+                .WithMany(course => course.Groups)
+                .HasForeignKey(group => group.CourseId)
+                .IsRequired(IsCourseIdRequired);
 
-            builder.HasMany(course => course.Groups)
-                .WithOne(group => group.Course)
-                .HasForeignKey(group => group.CourseId);
+            builder.HasMany(group => group.UserGroupLinks)
+                .WithOne(link => link.Group)
+                .HasForeignKey(link => link.GroupId);
 
             base.Configure(builder);
         }
@@ -60,9 +60,9 @@ public class Course : Entity
     public const int NameLengthMax = 128;
 
     /// <summary>
-    /// Статус необходимости наличия значения в поле <see cref="DepartmentId"/>.
+    /// Статус необходимости наличия значения в поле <see cref="CourseId"/>.
     /// </summary>
-    public const bool IsDepartmentIdRequired = true;
+    public const bool IsCourseIdRequired = true;
 
     /// <summary>
     /// Статус необходимости наличия значения в поле <see cref="Name"/>.
@@ -83,9 +83,9 @@ public class Course : Entity
     #region Entity
 
     /// <summary>
-    /// Идентификатор связанного объекта <see cref="Common.Department"/>.
+    /// Идентификатор связанного объекта <see cref="Common.Course"/>.
     /// </summary>
-    public int DepartmentId { get; set; }
+    public int CourseId { get; set; }
 
     /// <summary>
     /// Название.
@@ -95,12 +95,12 @@ public class Course : Entity
     #endregion
 
     /// <summary>
-    /// Связанный объект <see cref="Common.Department"/>.
+    /// Связанный объект <see cref="Common.Course"/>.
     /// </summary>
-    public Department Department { get; set; } = null!;
+    public Course Course { get; set; } = null!;
 
     /// <summary>
-    /// Связанные объекты <see cref="Group"/>.
+    /// Связанные объекты <see cref="UserGroupLink"/>.
     /// </summary>
-    public List<Group> Groups { get; set; } = null!;
+    public List<UserGroupLink> UserGroupLinks { get; set; } = null!;
 }

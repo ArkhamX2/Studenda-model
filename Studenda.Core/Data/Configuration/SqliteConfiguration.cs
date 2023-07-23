@@ -1,4 +1,4 @@
-namespace Studenda.Model.Data.Configuration;
+namespace Studenda.Core.Data.Configuration;
 
 /// <summary>
 /// Конфигурация базы данных SQLite.

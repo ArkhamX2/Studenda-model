@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Studenda.Model.Data;
-using Studenda.Model.Data.Configuration;
-using Studenda.Model.Shared.Common;
-using Studenda.Model.Shared.Link;
+using Studenda.Core.Data;
+using Studenda.Core.Data.Configuration;
+using Studenda.Core.Model.Common;
 
 Console.WriteLine("Starting INSERT test...");
 

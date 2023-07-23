@@ -1,19 +1,17 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Studenda.Model.Data.Configuration;
-using Studenda.Model.Shared.Link;
+using Studenda.Core.Data.Configuration;
 
-namespace Studenda.Model.Shared.Account;
+namespace Studenda.Core.Model.Common;
 
 /// <summary>
-/// Разрешение для <see cref="Role"/>.
-/// Обозначает некоторый доступ к некоторой функции.
+/// Факультет.
 /// </summary>
-public class Permission : Entity
+public class Department : Entity
 {
     /// <summary>
-    /// Конфигурация модели <see cref="Permission"/>.
+    /// Конфигурация модели <see cref="Department"/>.
     /// </summary>
-    internal class Configuration : Configuration<Permission>
+    internal class Configuration : Configuration<Department>
     {
         /// <summary>
         /// Конструктор.
@@ -25,15 +23,15 @@ public class Permission : Entity
         /// Задать конфигурацию для модели.
         /// </summary>
         /// <param name="builder">Набор интерфейсов настройки модели.</param>
-        public override void Configure(EntityTypeBuilder<Permission> builder)
+        public override void Configure(EntityTypeBuilder<Department> builder)
         {
-            builder.Property(permission => permission.Name)
+            builder.Property(department => department.Name)
                 .HasMaxLength(NameLengthMax)
                 .IsRequired(IsNameRequired);
 
-            builder.HasMany(permission => permission.RolePermissionLinks)
-                .WithOne(link => link.Permission)
-                .HasForeignKey(link => link.PermissionId);
+            builder.HasMany(department => department.Courses)
+                .WithOne(course => course.Department)
+                .HasForeignKey(course => course.DepartmentId);
 
             base.Configure(builder);
         }
@@ -61,7 +59,7 @@ public class Permission : Entity
     public const bool IsNameRequired = true;
 
     #endregion
-    
+
     /*             _   _ _
      *   ___ _ __ | |_(_) |_ _   _
      *  / _ \ '_ \| __| | __| | | |
@@ -81,7 +79,7 @@ public class Permission : Entity
     #endregion
 
     /// <summary>
-    /// Связанные объекты <see cref="RolePermissionLink"/>.
+    /// Связанные объекты <see cref="Course"/>.
     /// </summary>
-    public List<RolePermissionLink> RolePermissionLinks { get; set; } = null!;
+    public List<Course> Courses { get; set; } = null!;
 }
