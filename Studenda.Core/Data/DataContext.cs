@@ -152,6 +152,8 @@ public abstract class DataContext : DbContext
             {
                 continue;
             }
+            
+            // TODO: DateTime.Now возвращает текущие дату и время на устройстве, что может быть опасно при вставке в базу данных.
 
             // Добавлен новый объект.
             if (entry.State == EntityState.Added)
