@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Studenda.Model.Data.Configuration;
-using Studenda.Model.Shared.Link;
+using Studenda.Core.Data.Configuration;
+using Studenda.Core.Model.Link;
 
-namespace Studenda.Model.Shared.Account;
+namespace Studenda.Core.Model.Account;
 
 /// <summary>
 /// Разрешение для <see cref="Role"/>.
@@ -19,7 +19,7 @@ public class Permission : Entity
         /// Конструктор.
         /// </summary>
         /// <param name="configuration">Конфигурация базы данных.</param>
-        public Configuration(DatabaseConfiguration configuration) : base(configuration) { }
+        public Configuration(ContextConfiguration configuration) : base(configuration) { }
 
         /// <summary>
         /// Задать конфигурацию для модели.

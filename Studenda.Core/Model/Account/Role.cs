@@ -1,43 +1,42 @@
-using System.Text.RegularExpressions;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Studenda.Model.Data.Configuration;
+using Studenda.Core.Data.Configuration;
+using Studenda.Core.Model.Link;
 
-namespace Studenda.Model.Shared.Common;
+namespace Studenda.Core.Model.Account;
 
 /// <summary>
-/// Курс.
+/// Роль для <see cref="User"/>.
 /// </summary>
-public class Course : Entity
+public class Role : Entity
 {
     /// <summary>
-    /// Конфигурация модели <see cref="Course"/>.
+    /// Конфигурация модели <see cref="User"/>.
     /// </summary>
-    internal class Configuration : Configuration<Course>
+    internal class Configuration : Configuration<Role>
     {
         /// <summary>
         /// Конструктор.
         /// </summary>
         /// <param name="configuration">Конфигурация базы данных.</param>
-        public Configuration(DatabaseConfiguration configuration) : base(configuration) { }
+        public Configuration(ContextConfiguration configuration) : base(configuration) { }
 
         /// <summary>
         /// Задать конфигурацию для модели.
         /// </summary>
         /// <param name="builder">Набор интерфейсов настройки модели.</param>
-        public override void Configure(EntityTypeBuilder<Course> builder)
+        public override void Configure(EntityTypeBuilder<Role> builder)
         {
-            builder.Property(course => course.Name)
-                .HasMaxLength(NameLengthMax)
+            builder.Property(role => role.Name)
+                .HasMaxLength(User.NameLengthMax)
                 .IsRequired(IsNameRequired);
 
-            builder.HasOne(course => course.Department)
-                .WithMany(department => department.Courses)
-                .HasForeignKey(course => course.DepartmentId)
-                .IsRequired(IsDepartmentIdRequired);
+            builder.HasMany(role => role.Users)
+                .WithOne(user => user.Role)
+                .HasForeignKey(user => user.RoleId);
 
-            builder.HasMany(course => course.Groups)
-                .WithOne(group => group.Course)
-                .HasForeignKey(group => group.CourseId);
+            builder.HasMany(role => role.RolePermissionLinks)
+                .WithOne(link => link.Role)
+                .HasForeignKey(link => link.RoleId);
 
             base.Configure(builder);
         }
@@ -60,11 +59,6 @@ public class Course : Entity
     public const int NameLengthMax = 128;
 
     /// <summary>
-    /// Статус необходимости наличия значения в поле <see cref="DepartmentId"/>.
-    /// </summary>
-    public const bool IsDepartmentIdRequired = true;
-
-    /// <summary>
     /// Статус необходимости наличия значения в поле <see cref="Name"/>.
     /// </summary>
     public const bool IsNameRequired = true;
@@ -83,11 +77,6 @@ public class Course : Entity
     #region Entity
 
     /// <summary>
-    /// Идентификатор связанного объекта <see cref="Common.Department"/>.
-    /// </summary>
-    public int DepartmentId { get; set; }
-
-    /// <summary>
     /// Название.
     /// </summary>
     public string Name { get; set; } = null!;
@@ -95,12 +84,12 @@ public class Course : Entity
     #endregion
 
     /// <summary>
-    /// Связанный объект <see cref="Common.Department"/>.
+    /// Связанные объекты <see cref="User"/>.
     /// </summary>
-    public Department Department { get; set; } = null!;
+    public List<User> Users { get; set; } = null!;
 
     /// <summary>
-    /// Связанные объекты <see cref="Group"/>.
+    /// Связанные объекты <see cref="RolePermissionLink"/>.
     /// </summary>
-    public List<Group> Groups { get; set; } = null!;
+    public List<RolePermissionLink> RolePermissionLinks { get; set; } = null!;
 }

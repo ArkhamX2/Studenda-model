@@ -1,33 +1,37 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Studenda.Model.Data.Configuration;
+using Studenda.Core.Data.Configuration;
 
-namespace Studenda.Model.Shared.Common;
+namespace Studenda.Core.Model.Common;
 
 /// <summary>
-/// Тип учебной недели.
+/// Факультет.
 /// </summary>
-public class WeekType : Entity
+public class Department : Entity
 {
     /// <summary>
-    /// Конфигурация модели <see cref="WeekType"/>.
+    /// Конфигурация модели <see cref="Department"/>.
     /// </summary>
-    internal class Configuration : Configuration<WeekType>
+    internal class Configuration : Configuration<Department>
     {
         /// <summary>
         /// Конструктор.
         /// </summary>
         /// <param name="configuration">Конфигурация базы данных.</param>
-        public Configuration(DatabaseConfiguration configuration) : base(configuration) { }
+        public Configuration(ContextConfiguration configuration) : base(configuration) { }
 
         /// <summary>
         /// Задать конфигурацию для модели.
         /// </summary>
         /// <param name="builder">Набор интерфейсов настройки модели.</param>
-        public override void Configure(EntityTypeBuilder<WeekType> builder)
+        public override void Configure(EntityTypeBuilder<Department> builder)
         {
-            builder.Property(type => type.Name)
+            builder.Property(department => department.Name)
                 .HasMaxLength(NameLengthMax)
                 .IsRequired(IsNameRequired);
+
+            builder.HasMany(department => department.Courses)
+                .WithOne(course => course.Department)
+                .HasForeignKey(course => course.DepartmentId);
 
             base.Configure(builder);
         }
@@ -47,7 +51,7 @@ public class WeekType : Entity
     /// <summary>
     /// Максимальная длина поля <see cref="Name"/>.
     /// </summary>
-    public const int NameLengthMax = 32;
+    public const int NameLengthMax = 128;
 
     /// <summary>
     /// Статус необходимости наличия значения в поле <see cref="Name"/>.
@@ -73,4 +77,9 @@ public class WeekType : Entity
     public string Name { get; set; } = null!;
 
     #endregion
+
+    /// <summary>
+    /// Связанные объекты <see cref="Course"/>.
+    /// </summary>
+    public List<Course> Courses { get; set; } = null!;
 }

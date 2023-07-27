@@ -1,37 +1,33 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Studenda.Model.Data.Configuration;
+using Studenda.Core.Data.Configuration;
 
-namespace Studenda.Model.Shared.Common;
+namespace Studenda.Core.Model.Common;
 
 /// <summary>
-/// Факультет.
+/// Тип учебной недели.
 /// </summary>
-public class Department : Entity
+public class WeekType : Entity
 {
     /// <summary>
-    /// Конфигурация модели <see cref="Department"/>.
+    /// Конфигурация модели <see cref="WeekType"/>.
     /// </summary>
-    internal class Configuration : Configuration<Department>
+    internal class Configuration : Configuration<WeekType>
     {
         /// <summary>
         /// Конструктор.
         /// </summary>
         /// <param name="configuration">Конфигурация базы данных.</param>
-        public Configuration(DatabaseConfiguration configuration) : base(configuration) { }
+        public Configuration(ContextConfiguration configuration) : base(configuration) { }
 
         /// <summary>
         /// Задать конфигурацию для модели.
         /// </summary>
         /// <param name="builder">Набор интерфейсов настройки модели.</param>
-        public override void Configure(EntityTypeBuilder<Department> builder)
+        public override void Configure(EntityTypeBuilder<WeekType> builder)
         {
-            builder.Property(department => department.Name)
+            builder.Property(type => type.Name)
                 .HasMaxLength(NameLengthMax)
                 .IsRequired(IsNameRequired);
-
-            builder.HasMany(department => department.Courses)
-                .WithOne(course => course.Department)
-                .HasForeignKey(course => course.DepartmentId);
 
             base.Configure(builder);
         }
@@ -51,7 +47,7 @@ public class Department : Entity
     /// <summary>
     /// Максимальная длина поля <see cref="Name"/>.
     /// </summary>
-    public const int NameLengthMax = 128;
+    public const int NameLengthMax = 32;
 
     /// <summary>
     /// Статус необходимости наличия значения в поле <see cref="Name"/>.
@@ -77,9 +73,4 @@ public class Department : Entity
     public string Name { get; set; } = null!;
 
     #endregion
-
-    /// <summary>
-    /// Связанные объекты <see cref="Course"/>.
-    /// </summary>
-    public List<Course> Courses { get; set; } = null!;
 }

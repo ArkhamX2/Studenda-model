@@ -1,11 +1,13 @@
 using Microsoft.EntityFrameworkCore;
-using Studenda.Model.Data.Configuration;
-using Studenda.Model.Shared;
-using Studenda.Model.Shared.Account;
-using Studenda.Model.Shared.Common;
-using Studenda.Model.Shared.Link;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.Extensions.Logging;
+using Studenda.Core.Data.Configuration;
+using Studenda.Core.Model;
+using Studenda.Core.Model.Account;
+using Studenda.Core.Model.Common;
+using Studenda.Core.Model.Link;
 
-namespace Studenda.Model.Data;
+namespace Studenda.Core.Data;
 
 /// <summary>
 /// Сессия работы с базой данных.
@@ -23,21 +25,34 @@ namespace Studenda.Model.Data;
 ///   Объекты вставляются со статусом Unchanged.
 ///   При коммите изменений ничего не произойдет.
 /// </summary>
-public abstract class DataContext : DbContext
+public sealed class DataContext : DbContext
 {
     /// <summary>
     /// Конструктор.
     /// </summary>
     /// <param name="configuration">Конфигурация базы данных.</param>
-    protected DataContext(DatabaseConfiguration configuration)
+    public DataContext(ContextConfiguration configuration)
     {
         Configuration = configuration;
+
+        // TODO: Использовать асинхронные запросы.
+        if (!Database.CanConnect())
+        {
+            if (!Database.EnsureCreated())
+            {
+                throw new Exception("Connection error!");
+            }
+        }
+        else
+        {
+            Database.EnsureCreated();
+        }
     }
 
     /// <summary>
     /// Конфигурация базы данных.
     /// </summary>
-    private DatabaseConfiguration Configuration { get; }
+    private ContextConfiguration Configuration { get; }
 
     /// <summary>
     /// Набор объектов <see cref="User"/>.
@@ -83,6 +98,18 @@ public abstract class DataContext : DbContext
     /// Набор объектов <see cref="RolePermissionLink"/>.
     /// </summary>
     public DbSet<RolePermissionLink> RolePermissionLinks => Set<RolePermissionLink>();
+
+    /// <summary>
+    /// Обработать инициализацию сессии.
+    /// Используется для настройки сессии.
+    /// </summary>
+    /// <param name="optionsBuilder">Набор интерфейсов настройки сессии.</param>
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        Configuration.ConfigureContext(optionsBuilder);
+
+        base.OnConfiguring(optionsBuilder);
+    }
 
     /// <summary>
     /// Обработать инициализацию модели.
@@ -139,7 +166,6 @@ public abstract class DataContext : DbContext
     /// для обновления записей нужно сперва загрузить эти
     /// записи в кеш сессии, чтобы трекер корректно
     /// зафиксировал изменения.
-    /// TODO: Возможно, это не лучшее решение. Необходимы тесты.
     /// </summary>
     private void UpdateTrackedEntityMetadata()
     {
@@ -152,17 +178,13 @@ public abstract class DataContext : DbContext
             {
                 continue;
             }
-
-            // Добавлен новый объект.
-            if (entry.State == EntityState.Added)
-            {
-                entity.CreatedAt = DateTime.Now;
-            }
-
+            
             // Обновлен существующий объект.
             if (entry.State == EntityState.Modified)
             {
-                entity.UpdatedAt = DateTime.Now;
+                // Текущая дата и время на устройстве.
+                // Нельзя допустить, чтобы эти данные передавались во внешние хранилища.
+                entity.UpdatedAt = DateTime.Now.ToUniversalTime();
             }
         }
     }

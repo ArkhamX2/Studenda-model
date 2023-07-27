@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Studenda.Model", "Studenda.Model\Studenda.Model.csproj", "{0EA7F8F6-E105-433C-85D0-F63ECB1B6972}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Studenda.Core", "Studenda.Core\Studenda.Core.csproj", "{0EA7F8F6-E105-433C-85D0-F63ECB1B6972}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Studenda.Model.Test.Integration", "Studenda.Model.Test.Integration\Studenda.Model.Test.Integration.csproj", "{96D8FFD5-DC76-4AD8-B455-2CC877E165AF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Studenda.Core.Test.Integration", "Studenda.Core.Test.Integration\Studenda.Core.Test.Integration.csproj", "{96D8FFD5-DC76-4AD8-B455-2CC877E165AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
